@@ -13,13 +13,102 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <header class="site-header" data-header>
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html"><span class="brand-mark"><img src="public/logo.png" alt=""></span><span><strong>نوهة للإعاشة</strong><small>حلول الغذاء والتوريد</small></span></a>
+  <header class="site-header reference-header" data-header>
+    <div class="reference-topbar">
+      <div class="reference-top-info">
+        <a href="tel:+966126637184">+966 (12) 663 7184</a>
+        <span aria-hidden="true">◔</span>
+        <a href="mailto:info@nooha.com.sa">info@nooha.com.sa</a>
+        <span aria-hidden="true">⌂</span>
+      </div>
+      <a class="reference-contact" href="contact.html">اتصل بنا</a>
+    </div>
+
+    <div class="reference-mainbar">
+      <a class="brand reference-brand" href="index.html" aria-label="نوها للإعاشة">
+        <img src="public/logo.png" alt="نوها للإعاشة">
+        <span>
+          <strong>Nooha</strong>
+          <small>Catering Service</small>
+        </span>
+      </a>
+
       <button class="nav-toggle" type="button" data-nav-toggle aria-label="فتح القائمة"><span></span><span></span><span></span></button>
-      <nav class="main-nav" data-nav>
-        <a href="index.html">الرئيسية</a><a href="about.html">من نحن</a><a href="services.html" class="active">خدماتنا</a><a href="projects.html">أعمالنا</a><a href="certificates.html">الشهادات</a><a href="contact.html">تواصل معنا</a>
-              <button class="language-switch" type="button" data-language-switch aria-label="تغيير اللغة"><span class="active">AR</span><span>EN</span></button>
+
+      <nav class="main-nav reference-nav" data-nav aria-label="القائمة الرئيسية">
+        <div class="reference-nav-item"><a href="index.html">الرئيسية</a></div>
+
+        <div class="reference-nav-item has-mega">
+          <a href="about.html">عن نوها</a>
+          <div class="reference-mega">
+            <div class="mega-list two-cols">
+              <a href="about.html">نوها في سطور</a>
+              <a href="about.html">ما الذي نقدمه</a>
+              <a href="certificates.html">الاعتمادات</a>
+              <a href="about.html">الفئات والقطاعات المستهدفة</a>
+              <a href="about.html">خبرات فريق العمل</a>
+              <a href="about.html">لماذا نوها؟</a>
+            </div>
+            <img class="mega-image" src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=820&q=80" alt="فريق نوها داخل مطبخ احترافي">
+          </div>
+        </div>
+
+        <div class="reference-nav-item has-mega">
+          <a href="services.html" class="active">الخدمات</a>
+          <div class="reference-mega compact">
+            <div class="mega-list">
+              <a href="services.html">خدمات التموين والإعاشة من موقع العميل</a>
+              <a href="central-kitchen-madinah.html">خدمات التموين من مطابخنا المركزية</a>
+              <a href="services.html">خدمات الإعاشة المساندة</a>
+            </div>
+            <img class="mega-image" src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=820&q=80" alt="خدمات التموين">
+          </div>
+        </div>
+
+        <div class="reference-nav-item has-mega">
+          <a href="central-kitchen-madinah.html">مطابخنا المركزية</a>
+          <div class="reference-mega compact">
+            <div class="mega-list">
+              <a href="central-kitchen-madinah.html">المطبخ المركزي في المدينة المنورة</a>
+              <a href="makkah-branch.html">فرع مكة</a>
+              <a href="riyadh-import-export.html">فرع الاستيراد والتصدير في الرياض</a>
+            </div>
+            <img class="mega-image" src="public/images/real/central-kitchens-menu-preview-01.webp" alt="مطابخ وتجهيزات نوهة">
+          </div>
+        </div>
+
+        <div class="reference-nav-item has-simple">
+          <a href="projects.html">المعرض</a>
+          <div class="reference-simple-menu single"><a href="projects.html">الصور</a></div>
+        </div>
+
+        <div class="reference-nav-item has-mega">
+          <a href="certificates.html">مدونات</a>
+          <div class="reference-mega blog-menu">
+            <div class="mega-list two-cols">
+              <a href="certificates.html">اليوم الوطني السعودي الـ 94</a>
+              <a href="certificates.html">أهمية الاهتمام بالغذاء للعمالة</a>
+              <a href="certificates.html">شهادة الآيزو وسلامة الغذاء</a>
+              <a href="certificates.html">اليوم العالمي لسلامة الأغذية</a>
+              <a href="certificates.html">يوم التأسيس: نغذي مسيرة العطاء</a>
+              <a href="certificates.html">أفضل شركة تموين وإعاشة</a>
+            </div>
+            <img class="mega-image" src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=820&q=80" alt="مطبخ مركزي">
+          </div>
+        </div>
+
+        <div class="reference-nav-item"><a href="careers.html">التوظيف</a></div>
+        <div class="reference-nav-item"><a href="contact.html">تواصل معنا</a></div>
+
+        <div class="reference-nav-item has-simple">
+          <button class="language-switch reference-language" type="button" data-language-switch aria-label="تغيير اللغة">العربية</button>
+          <div class="reference-simple-menu language-menu">
+            <button type="button">العربية</button>
+            <button type="button">English</button>
+          </div>
+        </div>
+
+        <div class="reference-nav-item profile-item"><a href="company-profile.html">الملف التعريفي</a></div>
       </nav>
     </div>
   </header>
@@ -31,7 +120,7 @@
         <p>بطاقات خدمات منظمة تسهل إضافة تفاصيل وأسعار ونطاقات خدمة لاحقًا.</p>
       </div>
     </section>
-    <section class="section">
+    <section class="section" id="central-kitchens">
       <div class="container services-layout">
         <aside class="side-panel reveal">
           <h2>نطاق الخدمة</h2>
@@ -49,7 +138,34 @@
       </div>
     </section>
   </main>
-  <footer class="site-footer compact-footer"><div class="container footer-bottom"><span>© 2026 نوهة للإعاشة</span><a href="contact.html">تواصل معنا</a></div></footer>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="index.html">
+          <span class="brand-mark"><img src="public/logo.png" alt=""></span>
+          <span><strong>نوهة للإعاشة</strong><small>حلول الغذاء والتوريد</small></span>
+        </a>
+        <p>محتوى تعريفي مبدئي لشركة إعاشة وتوريد غذائي، قابل للتخصيص بعد اعتماد الهوية والمحتوى النهائي.</p>
+      </div>
+      <div>
+        <h3>روابط سريعة</h3>
+        <a href="about.html">من نحن</a>
+        <a href="services.html">خدماتنا</a>
+        <a href="projects.html">أعمالنا</a>
+        <a href="careers.html">التوظيف</a>
+      </div>
+      <div>
+        <h3>تواصل</h3>
+        <a href="tel:+966500000000">+966 50 000 0000</a>
+        <a href="mailto:info@example.com">info@example.com</a>
+        <span>الرياض، المملكة العربية السعودية</span>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2026 نوهة للإعاشة. جميع الحقوق محفوظة.</span>
+      <span>تصميم مبدئي قابل للتطوير.</span>
+    </div>
+  </footer>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -11,6 +11,8 @@ const translations = {
     "خدماتنا": "Services",
     "أعمالنا": "Projects",
     "الشهادات": "Certificates",
+    "التوظيف": "Careers",
+    "مطابخنا المركزية": "Central kitchens",
     "تواصل معنا": "Contact us",
     "شركة إعاشة وتوريد غذائي": "Catering and food supply company",
     "حلول غذائية متكاملة للمواقع والمنشآت الكبرى": "Integrated food solutions for major sites and facilities",
@@ -180,6 +182,11 @@ const translations = {
     "services.html": ["نوهة للإعاشة | خدماتنا", "Nooha Catering | Services"],
     "projects.html": ["نوهة للإعاشة | أعمالنا", "Nooha Catering | Projects"],
     "certificates.html": ["نوهة للإعاشة | الشهادات والوثائق", "Nooha Catering | Certificates"],
+    "company-profile.html": ["نوهة للإعاشة | الملف التعريفي", "Nooha Catering | Company Profile"],
+    "careers.html": ["نوهة للإعاشة | التوظيف", "Nooha Catering | Careers"],
+    "central-kitchen-madinah.html": ["نوهة للإعاشة | المطبخ المركزي في المدينة المنورة", "Nooha Catering | Madinah Central Kitchen"],
+    "makkah-branch.html": ["نوهة للإعاشة | فرع مكة", "Nooha Catering | Makkah Branch"],
+    "riyadh-import-export.html": ["نوهة للإعاشة | فرع الاستيراد والتصدير في الرياض", "Nooha Catering | Riyadh Import and Export Branch"],
     "contact.html": ["نوهة للإعاشة | تواصل معنا", "Nooha Catering | Contact"]
   },
   messages: {
@@ -260,6 +267,62 @@ navToggle?.addEventListener("click", () => {
 
 document.querySelectorAll(".main-nav a").forEach((link) => {
   link.addEventListener("click", () => nav?.classList.remove("is-open"));
+});
+
+const referenceMenuItems = document.querySelectorAll(".reference-nav-item.has-mega, .reference-nav-item.has-simple");
+let referenceMenuTimer;
+
+function closeReferenceMenus(exceptItem = null) {
+  referenceMenuItems.forEach((item) => {
+    if (item !== exceptItem) {
+      item.classList.remove("is-menu-open");
+    }
+  });
+}
+
+function openReferenceMenu(item) {
+  clearTimeout(referenceMenuTimer);
+  closeReferenceMenus(item);
+  item.classList.add("is-menu-open");
+}
+
+function scheduleReferenceMenuClose(item) {
+  clearTimeout(referenceMenuTimer);
+  referenceMenuTimer = setTimeout(() => {
+    item.classList.remove("is-menu-open");
+  }, 700);
+}
+
+referenceMenuItems.forEach((item) => {
+  const trigger = Array.from(item.children).find((child) => child.matches("a, button"));
+  const panel = item.querySelector(".reference-mega, .reference-simple-menu");
+
+  if (!trigger || !panel) return;
+
+  [trigger, panel].forEach((element) => {
+    element.addEventListener("mouseenter", () => openReferenceMenu(item));
+    element.addEventListener("mouseleave", () => scheduleReferenceMenuClose(item));
+    element.addEventListener("focusin", () => openReferenceMenu(item));
+    element.addEventListener("focusout", () => {
+      setTimeout(() => {
+        if (!item.contains(document.activeElement)) {
+          scheduleReferenceMenuClose(item);
+        }
+      }, 0);
+    });
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".reference-nav")) {
+    closeReferenceMenus();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeReferenceMenus();
+  }
 });
 
 document.querySelectorAll("[data-language-switch]").forEach((switcher) => {
