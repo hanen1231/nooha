@@ -758,7 +758,7 @@ textarea {
 .projects-hero {
   background-image:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
 }
 
 .certificates-hero,
@@ -936,6 +936,60 @@ textarea {
   font-size: 0.8rem;
   font-weight: 900;
   letter-spacing: var(--letter-spacing-wide);
+}
+
+.photo-masonry-section {
+  padding: 54px 0 96px;
+  background: #fff;
+}
+
+.photo-masonry-section .container {
+  width: min(1180px, calc(100% - 32px));
+}
+
+.photo-masonry {
+  column-count: 4;
+  column-gap: 12px;
+  direction: ltr;
+}
+
+.photo-masonry-item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  break-inside: avoid;
+  margin: 0 0 12px;
+  background: #e9eeea;
+}
+
+.photo-masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 180px;
+  object-fit: cover;
+  transition: transform var(--transition-slow), filter var(--transition-slow);
+}
+
+.photo-masonry-item.wide img {
+  aspect-ratio: 16 / 10;
+}
+
+.photo-masonry-item.square img {
+  aspect-ratio: 1 / 1;
+}
+
+.photo-masonry-item.portrait img {
+  aspect-ratio: 4 / 5;
+}
+
+.photo-masonry-item.tall img {
+  aspect-ratio: 3 / 4;
+}
+
+.photo-masonry-item:hover img {
+  filter: saturate(1.06) contrast(1.03);
+  transform: scale(1.035);
 }
 
 .document-card a {
@@ -2076,6 +2130,10 @@ textarea {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .photo-masonry {
+    column-count: 3;
+  }
+
   .kitchen-stats {
     grid-template-columns: 1fr;
   }
@@ -2183,6 +2241,23 @@ textarea {
   .gallery-grid img,
   .project-card img {
     height: 220px;
+  }
+
+  .photo-masonry-section {
+    padding: 34px 0 72px;
+  }
+
+  .photo-masonry-section .container {
+    width: min(calc(100% - 20px), var(--container));
+  }
+
+  .photo-masonry {
+    column-count: 2;
+    column-gap: 8px;
+  }
+
+  .photo-masonry-item {
+    margin-bottom: 8px;
   }
 
   .contact-form,
@@ -2951,5 +3026,11 @@ body:not(.home-page) .page-hero p {
 
   body:not(.home-page) .page-hero h1 {
     font-size: clamp(2rem, 10vw, 2.9rem);
+  }
+}
+
+@media (max-width: 420px) {
+  .photo-masonry {
+    column-count: 1;
   }
 }
