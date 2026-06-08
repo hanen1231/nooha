@@ -253,6 +253,7 @@ const supplementalTranslations = {
     "رقم الجوال *": "Mobile Number *",
     "البريد الإلكتروني *": "Email *",
     "نوع الخدمة *": "Service Type *",
+    "رسالة قصيرة *": "Short Message *",
     "إرسال": "Submit",
     "نؤمن بأن تقديم حلول التموين والإعاشة المناسبة يسهم بشكل مباشر في رفع كفاءة القوى العاملة في مختلف المواقع والقطاعات. من مطابخنا المركزية، ترسل آلاف الوجبات يوميًا إلى أماكن العمل في جميع أنحاء المملكة، لتلبية احتياجات بيئات العمل المتنوعة مع الحفاظ على أعلى مستويات الجودة والالتزام الصارم بالعمليات التشغيلية.": "We believe that providing the right catering and support solutions directly improves workforce efficiency across different sites and sectors. From our central kitchens, thousands of meals are delivered daily to workplaces across the Kingdom, serving diverse work environments while maintaining high quality and strict operational discipline.",
     "نعمل مع شركات رائدة ومشاريع كبرى في قطاعات الصناعة والبناء والضيافة والرعاية الصحية ومبادرات الرؤية، لنكون جزءًا لا يتجزأ من دورة تشغيلية تضمن استمرار القوى العاملة في تقديم أفضل أداء ممكن.": "We work with leading companies and major projects in industry, construction, hospitality, healthcare, and Vision initiatives, becoming part of an operating cycle that helps workforces continue performing at their best.",
@@ -528,6 +529,7 @@ const supplementalTranslations = {
     "الاسم": "Name",
     "رقم الجوال": "Mobile number",
     "البريد الإلكتروني": "Email",
+    "اكتب احتياجك باختصار": "Briefly describe your request",
     "فريق عمل داخل مطبخ احترافي": "Team working inside a professional kitchen",
     "مثال: جدة": "Example: Jeddah",
     "اكتب خبرتك، المدينة المناسبة، وأقرب موعد للانضمام": "Write your experience, preferred city, and earliest joining date",
@@ -856,13 +858,81 @@ filterGroup?.addEventListener("click", (event) => {
   });
 });
 
-document.querySelector(".contact-form")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const button = event.currentTarget.querySelector("button[type='submit']");
-  const originalText = button.textContent;
-  const language = document.documentElement.lang === "en" ? "en" : "ar";
-  button.textContent = translations.messages[language];
-  setTimeout(() => {
-    button.textContent = originalText;
-  }, 2200);
+const whatsappNumber = "966570000171";
+
+const formFieldLabels = {
+  ar: {
+    name: "الاسم",
+    phone: "رقم الجوال",
+    email: "البريد الإلكتروني",
+    service: "نوع الخدمة",
+    city: "المدينة",
+    department: "المجال الوظيفي",
+    experience: "سنوات الخبرة",
+    message: "التفاصيل"
+  },
+  en: {
+    name: "Name",
+    phone: "Mobile number",
+    email: "Email",
+    service: "Service type",
+    city: "City",
+    department: "Job field",
+    experience: "Years of experience",
+    message: "Details"
+  }
+};
+
+function getFormTitle(form, language) {
+  const isCareerForm = form.querySelector("[name='department'], [name='experience']");
+  const isQuoteForm = form.classList.contains("home-quote-form");
+
+  if (language === "en") {
+    if (isCareerForm) return "New job application";
+    if (isQuoteForm) return "New quotation request";
+    return "New contact request";
+  }
+
+  if (isCareerForm) return "طلب توظيف جديد";
+  if (isQuoteForm) return "طلب عرض سعر جديد";
+  return "طلب تواصل جديد";
+}
+
+function buildWhatsAppMessage(form, language) {
+  const labels = formFieldLabels[language];
+  const formData = new FormData(form);
+  const lines = [getFormTitle(form, language), ""];
+
+  Object.keys(labels).forEach((key) => {
+    const value = String(formData.get(key) || "").trim();
+    if (value) {
+      lines.push(`${labels[key]}: ${value}`);
+    }
+  });
+
+  return lines.join("\n");
+}
+
+document.querySelectorAll(".contact-form").forEach((form) => {
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const language = document.documentElement.lang === "en" ? "en" : "ar";
+    const button = form.querySelector("button[type='submit']");
+    const originalText = button?.textContent;
+    const message = buildWhatsAppMessage(form, language);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    if (button) {
+      button.textContent = language === "en" ? "Opening WhatsApp..." : "جاري فتح واتساب...";
+    }
+
+    window.location.href = whatsappUrl;
+
+    setTimeout(() => {
+      if (button && originalText) {
+        button.textContent = originalText;
+      }
+    }, 1800);
+  });
 });

@@ -1676,7 +1676,8 @@ textarea {
 }
 
 .home-quote-form input,
-.home-quote-form select {
+.home-quote-form select,
+.home-quote-form textarea {
   min-height: 48px;
   border-color: rgba(18, 69, 89, 0.28);
   background: var(--color-white);
@@ -2873,36 +2874,46 @@ body:not(.home-page) .page-hero p {
 
 .reference-simple-menu {
   position: absolute;
-  top: calc(100% - 2px);
+  top: calc(100% + 8px);
   left: 50%;
   z-index: 6;
   display: grid;
-  min-width: 232px;
-  padding: 24px;
+  min-width: 168px;
+  padding: 10px;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  border-radius: 4px;
-  background: var(--color-white);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(242, 217, 187, 0.2);
+  border-radius: 6px;
+  background: rgba(7, 20, 23, 0.96);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
   transform: translate(-50%, 10px);
   transition: opacity var(--transition-fast), visibility var(--transition-fast), transform var(--transition-fast);
 }
 
 .reference-simple-menu.single {
-  min-height: 80px;
+  min-height: 0;
   place-items: center;
 }
 
 .reference-simple-menu a,
 .reference-simple-menu button {
+  min-height: 38px;
+  padding: 8px 14px;
   border: 0;
-  color: var(--color-muted);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.9);
   background: transparent;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.9rem;
+  font-weight: 800;
   text-align: center;
   cursor: pointer;
+}
+
+.reference-simple-menu a:hover,
+.reference-simple-menu button:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .language-menu {
@@ -3115,10 +3126,10 @@ body:not(.home-page) .page-hero p {
 }
 
 .whatsapp-float {
-  position: absolute;
-  right: 22px;
-  bottom: 22px;
-  z-index: 3;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 160;
   display: grid;
   place-items: center;
   width: 54px;
@@ -3136,8 +3147,8 @@ body:not(.home-page) .page-hero p {
 }
 
 .whatsapp-float svg {
-  width: 30px;
-  height: 30px;
+  width: 31px;
+  height: 31px;
   fill: currentColor;
 }
 
