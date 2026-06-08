@@ -150,9 +150,10 @@ const translations = {
     "هذه البيانات Placeholder وسيتم استبدالها بالبيانات الرسمية.": "These starter details can be replaced with the official company information.",
     "الهاتف: +966 50 000 0000": "Phone: +966 50 000 0000",
     "البريد: info@example.com": "Email: info@example.com",
-    "الموقع: الرياض، المملكة العربية السعودية": "Location: Riyadh, Saudi Arabia",
+    "الموقع: المدينة المنورة، المملكة العربية السعودية": "Location: Madinah, Saudi Arabia",
     "ساعات العمل: الأحد - الخميس، 9 صباحًا - 5 مساءً": "Working hours: Sunday to Thursday, 9 AM to 5 PM",
-    "خريطة Placeholder": "Map placeholder"
+    "خريطة Placeholder": "Map placeholder",
+    "فتح الموقع على خرائط Google": "Open location in Google Maps"
   },
   attrs: {
     "نوهة للإعاشة": "Nooha Catering",
@@ -174,7 +175,8 @@ const translations = {
     "إنستغرام": "Instagram",
     "اكتب الاسم": "Enter your name",
     "عدد المستفيدين، المدينة، مدة العقد، وأي تفاصيل مهمة": "Beneficiary count, city, contract duration, and any important details",
-    "شركة إعاشة وتوريد غذائي تقدم حلول تشغيل مطابخ وتغذية جماعية باحترافية.": "Nooha Catering provides professional catering, kitchen operations, food supply, and daily meal solutions for large facilities and projects."
+    "شركة إعاشة وتوريد غذائي تقدم حلول تشغيل مطابخ وتغذية جماعية باحترافية.": "Nooha Catering provides professional catering, kitchen operations, food supply, and daily meal solutions for large facilities and projects.",
+    "موقع شركة نوهة على خرائط Google": "Nooha location on Google Maps"
   },
   titles: {
     "index.html": ["نوهة للإعاشة | الرئيسية", "Nooha Catering | Home"],
@@ -194,6 +196,367 @@ const translations = {
     en: "Request prepared"
   }
 };
+
+const supplementalTranslations = {
+  text: {
+    "نوهة للإعاشة | الرئيسية": "Nooha Catering | Home",
+    "نوهة للإعاشة | من نحن": "Nooha Catering | About",
+    "نوهة للإعاشة | خدماتنا": "Nooha Catering | Services",
+    "نوهة للإعاشة | الصور": "Nooha Catering | Gallery",
+    "نوهة للإعاشة | الشهادات والوثائق": "Nooha Catering | Certificates and Documents",
+    "نوهة للإعاشة | التوظيف": "Nooha Catering | Careers",
+    "نوهة للإعاشة | تواصل معنا": "Nooha Catering | Contact",
+    "نوهة للإعاشة | الملف التعريفي": "Nooha Catering | Company Profile",
+    "نوهة للإعاشة | المطبخ المركزي في المدينة المنورة": "Nooha Catering | Madinah Central Kitchen",
+    "نوهة للإعاشة | المطبخ المركزي في الرياض": "Nooha Catering | Riyadh Central Kitchen",
+    "نوهة للإعاشة | المطبخ المركزي في تبوك ضباء": "Nooha Catering | Tabuk Duba Central Kitchen",
+    "نوهة للإعاشة | فرع مكة": "Nooha Catering | Makkah Branch",
+    "نوهة للإعاشة | فرع الاستيراد والتصدير في الرياض": "Nooha Catering | Riyadh Import and Export Branch",
+    "اتصل بنا": "Contact us",
+    "عن نوها": "About Nooha",
+    "عن نوهة": "About Nooha",
+    "نوها في سطور": "Nooha at a Glance",
+    "نوهة في سطور": "Nooha at a Glance",
+    "ما الذي نقدمه": "What We Offer",
+    "الاعتمادات": "Accreditations",
+    "الفئات والقطاعات المستهدفة": "Target Categories and Sectors",
+    "خبرات فريق العمل": "Team Experience",
+    "لماذا نوها؟": "Why Nooha?",
+    "لماذا نوهة؟": "Why Nooha?",
+    "الخدمات": "Services",
+    "خدمات التموين والإعاشة من موقع العميل": "On-site Catering and Support Services",
+    "خدمات التموين من مطابخنا المركزية": "Catering Services from Our Central Kitchens",
+    "خدمات الإعاشة المساندة": "Supporting Catering Services",
+    "المطبخ المركزي في المدينة المنورة": "Madinah Central Kitchen",
+    "فرع مكة": "Makkah Branch",
+    "فرع الاستيراد والتصدير في الرياض": "Riyadh Import and Export Branch",
+    "المعرض": "Gallery",
+    "الصور": "Photos",
+    "مدونات": "Blog",
+    "اليوم الوطني السعودي الـ 94": "Saudi National Day 94",
+    "أهمية الاهتمام بالغذاء للعمالة": "The Importance of Food Care for Workers",
+    "شهادة الآيزو وسلامة الغذاء": "ISO Certification and Food Safety",
+    "اليوم العالمي لسلامة الأغذية": "World Food Safety Day",
+    "يوم التأسيس: نغذي مسيرة العطاء": "Founding Day: Nourishing a Journey of Giving",
+    "أفضل شركة تموين وإعاشة": "Best Catering and Support Services Company",
+    "العربية": "Arabic",
+    "الملف التعريفي": "Company Profile",
+    "نغذي": "Nourishing",
+    "طموحكم": "Your Ambition",
+    "بخدمة تليق بثقتكم": "with Service Worthy of Your Trust",
+    "نغذي طموحكم بخدمة تليق بثقتكم": "Nourishing Your Ambition with Service Worthy of Your Trust",
+    "شركة نوهه": "Nooha Company",
+    "نغذي طموحكم بخدمة تليق بثقتكم عبر دعم غذائي استراتيجي لمشاريع نيوم والمناطق المحيطة.": "Nourishing your ambition with service worthy of your trust through strategic food support for NEOM projects and surrounding areas.",
+    "طلب عرض سعر": "Request a Quote",
+    "لطلب عرض سعر": "Request a Quote",
+    "الاسم *": "Name *",
+    "رقم الجوال *": "Mobile Number *",
+    "البريد الإلكتروني *": "Email *",
+    "نوع الخدمة *": "Service Type *",
+    "إرسال": "Submit",
+    "نؤمن بأن تقديم حلول التموين والإعاشة المناسبة يسهم بشكل مباشر في رفع كفاءة القوى العاملة في مختلف المواقع والقطاعات. من مطابخنا المركزية، ترسل آلاف الوجبات يوميًا إلى أماكن العمل في جميع أنحاء المملكة، لتلبية احتياجات بيئات العمل المتنوعة مع الحفاظ على أعلى مستويات الجودة والالتزام الصارم بالعمليات التشغيلية.": "We believe that providing the right catering and support solutions directly improves workforce efficiency across different sites and sectors. From our central kitchens, thousands of meals are delivered daily to workplaces across the Kingdom, serving diverse work environments while maintaining high quality and strict operational discipline.",
+    "نعمل مع شركات رائدة ومشاريع كبرى في قطاعات الصناعة والبناء والضيافة والرعاية الصحية ومبادرات الرؤية، لنكون جزءًا لا يتجزأ من دورة تشغيلية تضمن استمرار القوى العاملة في تقديم أفضل أداء ممكن.": "We work with leading companies and major projects in industry, construction, hospitality, healthcare, and Vision initiatives, becoming part of an operating cycle that helps workforces continue performing at their best.",
+    "خبرة في مجال القوى العاملة": "Workforce Sector Experience",
+    "يتمتع فريق نوهة بخبرة تشغيلية واسعة في إدارة خدمات التموين والإعاشة في بيئات عمل متنوعة، مع سجل حافل بالحفاظ على الجودة والانضباط التشغيلي.": "Nooha's team has broad operating experience managing catering and support services in diverse work environments, with a strong record of quality and operational discipline.",
+    "حاصلون على اعتماد مدن - الدرجة الأولى، ولدينا أكبر مطبخ في المدينة المنورة": "Certified by MODON - First Class, with the largest kitchen in Madinah",
+    "ندير منظومة تموين وإعاشة متكاملة، تبدأ من إعداد المقادير وتنتهي بإدارة الميدان.": "We manage an integrated catering system, from ingredient preparation through field operations.",
+    "اعرف أكثر": "Learn More",
+    "تعرف أكثر": "Learn More",
+    "عدد العملاء": "Clients",
+    "الموظفين": "Employees",
+    "قطاعات مختلفة": "Different Sectors",
+    "عدد الوجبات يوميًا": "Meals per Day",
+    "مطابخنا": "Our Kitchens",
+    "المستفيدون يوميًا": "Daily Beneficiaries",
+    "شركاء النجاح": "Success Partners",
+    "شبكة مطابخ تخدم مواقع العمل في مختلف مناطق المملكة": "A kitchen network serving work sites across the Kingdom",
+    "المدينة المنورة": "Madinah",
+    "المطبخ المركزي": "Central Kitchen",
+    "خدمة وتموين المواقع": "Site Catering and Service",
+    "الرياض": "Riyadh",
+    "فرع الاستيراد والتصدير": "Import and Export Branch",
+    "نخدم قطاعات تحتاج إلى توريد غذائي منضبط ومستمر": "We serve sectors that need disciplined, continuous food supply",
+    "المصانع والشركات": "Factories and Companies",
+    "الفنادق": "Hotels",
+    "شركات المقاولات": "Contracting Companies",
+    "مشروعات رؤية 2030": "Vision 2030 Projects",
+    "حقول ومنشآت النفط والغاز": "Oil and Gas Fields and Facilities",
+    "الشركات في المناطق النائية": "Companies in Remote Areas",
+    "المجمعات السكنية العمالية": "Worker Housing Compounds",
+    "المستشفيات والمراكز الصحية": "Hospitals and Healthcare Centers",
+    "القطاعات الأمنية والعقود الحكومية": "Security Sectors and Government Contracts",
+    "خبرة تشغيلية واسعة في إدارة التغذية والإعاشة": "Extensive Operating Experience in Food and Catering Management",
+    "يمتلك فريق نوهة خبرة تشغيلية واسعة في إدارة التغذية والإعاشة في بيئات عمل متنوعة، وبقدرة عالية على الحفاظ على الجودة والانضباط.": "Nooha's team has extensive operating experience managing food and catering in diverse work environments, with a strong ability to maintain quality and discipline.",
+    "تقديم وجبات غذائية تناسب أكثر من عشر جنسيات مختلفة.": "Providing meals suitable for more than ten nationalities.",
+    "إدارة وتشغيل مجمعات سكنية للعمالة تخدم آلاف المستفيدين.": "Managing and operating worker housing compounds serving thousands of beneficiaries.",
+    "إدارة وتشغيل مطابخ مركزية تخدم مواقع متعددة.": "Managing and operating central kitchens that serve multiple sites.",
+    "خبرة في العمل عبر مدن ومناطق مختلفة مع مرونة تشغيلية دون التأثير على الجودة.": "Experience working across different cities and regions with operational flexibility without compromising quality.",
+    "لمزيد من المعلومات أو لطلب خدمة": "For more information or to request a service",
+    "لا تتردد في التواصل معنا في أي وقت. فريقنا جاهز لدراسة احتياج موقعك وتجهيز نموذج خدمة مناسب.": "Contact us at any time. Our team is ready to review your site's needs and prepare a suitable service model.",
+    "من مطابخنا المركزية ننطلق يوميًا لإعداد آلاف الوجبات إلى مواقع العمل في مختلف مناطق المملكة، بسرعة تنفيذ وضبط صحي ومعايير جودة وسلامة عالية وثابتة.": "From our central kitchens, we prepare thousands of meals daily for work sites across the Kingdom, with fast execution, health control, and consistent quality and safety standards.",
+    "انضم إلى فريق نوهة في تشغيل الإعاشة والخدمات الغذائية": "Join Nooha's Catering and Food Services Team",
+    "نستقبل طلبات المرشحين للوظائف التشغيلية والإدارية وسلاسل الإمداد، مع فرز مبدئي حسب الخبرة والمدينة والتخصص.": "We receive applications for operational, administrative, and supply chain roles, with initial screening by experience, city, and specialty.",
+    "بيئة العمل": "Work Environment",
+    "فريق يعتمد على الانضباط، سلامة الغذاء، وجودة الخدمة اليومية": "A team built on discipline, food safety, and daily service quality",
+    "تحتاج مشاريع الإعاشة إلى فرق ملتزمة بالتفاصيل اليومية: التحضير، النظافة، الجداول، التوريد، والتعامل المهني مع مواقع العملاء. هذه الصفحة مخصصة لاستقبال طلبات الانضمام وفرزها مبدئيًا.": "Catering projects need teams committed to daily details: preparation, hygiene, schedules, supply, and professional interaction with client sites. This page is dedicated to receiving applications and initial screening.",
+    "يمكن لاحقًا ربط النموذج بالبريد الإلكتروني أو نظام موارد بشرية، وإضافة وظائف مفتوحة حسب المدينة والموقع.": "The form can later be connected to email or an HR system, with open roles added by city and site.",
+    "المسارات المتاحة": "Available Tracks",
+    "مجالات عمل يمكن التقديم عليها": "Areas You Can Apply For",
+    "طهاة، مساعدو طهاة، مشرفو تحضير، ومسؤولو نظافة وتشغيل.": "Chefs, assistant chefs, preparation supervisors, and hygiene and operations staff.",
+    "الجودة والسلامة": "Quality and Safety",
+    "متابعة تطبيق إجراءات سلامة الغذاء، الفحص اليومي، وتوثيق الملاحظات.": "Monitoring food safety procedures, daily inspections, and documentation of notes.",
+    "التوريد والمستودعات": "Supply and Warehousing",
+    "تنسيق الموردين، متابعة المخزون، التجهيز، وجدولة التسليم.": "Supplier coordination, inventory follow-up, preparation, and delivery scheduling.",
+    "الإدارة والدعم": "Administration and Support",
+    "إدارة المواقع، خدمة العملاء، الموارد البشرية، والمساندة الإدارية.": "Site management, customer service, human resources, and administrative support.",
+    "المدينة": "City",
+    "المجال الوظيفي": "Job Field",
+    "سنوات الخبرة": "Years of Experience",
+    "أقل من سنة": "Less than one year",
+    "1 - 3 سنوات": "1 - 3 years",
+    "4 - 7 سنوات": "4 - 7 years",
+    "أكثر من 7 سنوات": "More than 7 years",
+    "إرسال طلب التوظيف": "Submit Job Application",
+    "آلية استقبال الطلبات": "Application Intake Process",
+    "هذا نموذج مبدئي لجمع بيانات المرشحين، ويمكن تطويره لاحقًا لرفع السيرة الذاتية أو ربطه بالبريد.": "This is a starter form for collecting candidate information and can later be developed for CV upload or email integration.",
+    "الفرز حسب المدينة والتخصص": "Screening by city and specialty",
+    "التواصل مع المرشحين المناسبين": "Contacting suitable candidates",
+    "تحديث الوظائف المفتوحة لاحقًا": "Updating open positions later",
+    "إمكانية ربط النموذج بنظام موارد بشرية": "Potential HR system integration",
+    "إرسال السيرة بالبريد": "Send CV by Email",
+    "مركز تشغيل رئيسي لإعداد الوجبات وخدمة مواقع العمل والضيافة والقطاعات التي تحتاج إلى تموين يومي منظم.": "A main operating center for meal preparation and for serving work sites, hospitality, and sectors that need organized daily catering.",
+    "تشغيل يومي يخدم احتياج المواقع بكفاءة": "Daily operations that efficiently serve site needs",
+    "يمثل مطبخ المدينة المنورة نقطة التشغيل المركزية لدى نوهة، حيث يتم تجهيز الوجبات وفق مسارات عمل واضحة تشمل التخزين، التحضير، الطبخ، التغليف، والتسليم.": "The Madinah kitchen is Nooha's central operating point, where meals are prepared through clear workflows covering storage, preparation, cooking, packaging, and delivery.",
+    "يركز الفرع على خدمة المشاريع والمواقع التي تحتاج إلى جودة ثابتة واستجابة مرنة، مع مراعاة متطلبات السلامة الغذائية وسرعة التوزيع.": "The branch focuses on serving projects and sites that require consistent quality and flexible response while meeting food safety requirements and fast distribution.",
+    "مطبخ مركزي مجهز لخدمة التشغيل اليومي": "A central kitchen equipped for daily operations",
+    "الأرقام التالية قابلة للتحديث عند اعتماد البيانات النهائية، لكنها تعرض هيكلًا مناسبًا لعرض الطاقة والمساحة والمستفيدين.": "The following figures can be updated when final data is approved, but they provide a suitable structure for presenting capacity, area, and beneficiaries.",
+    "متر مربع": "square meters",
+    "وجبة يوميًا": "meals per day",
+    "مستفيد يوميًا": "beneficiaries per day",
+    "خدمات تموين وإعاشة منضبطة": "Disciplined catering and support services",
+    "تحضير يومي": "Daily Preparation",
+    "إعداد الوجبات وفق قوائم تشغيل معتمدة.": "Meal preparation according to approved operating menus.",
+    "تخزين وتبريد": "Storage and Cooling",
+    "مناطق تخزين مخصصة للحفاظ على جودة المواد.": "Dedicated storage areas to preserve material quality.",
+    "تغليف وتسليم": "Packaging and Delivery",
+    "تنظيم مراحل التغليف والتسليم حسب احتياج الموقع.": "Organizing packaging and delivery stages according to site needs.",
+    "سلامة غذائية": "Food Safety",
+    "متابعة إجراءات النظافة وسلامة الغذاء في مراحل التشغيل.": "Monitoring hygiene and food safety procedures during operating stages.",
+    "من مطبخنا المركزي وفروعنا ننطلق يوميًا لخدمة مواقع العمل بسرعة تنفيذ وضبط صحي ومعايير جودة ثابتة.": "From our central kitchen and branches, we serve work sites daily with fast execution, health control, and consistent quality standards.",
+    "المملكة العربية السعودية": "Saudi Arabia",
+    "المطبخ المركزي في الرياض، نموذج الكفاءة في تقديم خدمات الإعاشة للمشاريع الكبرى والجهات التي تحتاج إلى تموين يومي منتظم.": "The Riyadh Central Kitchen is a model of efficiency in providing catering services for major projects and organizations that need regular daily supply.",
+    "المطبخ المركزي في الرياض": "Riyadh Central Kitchen",
+    "نموذج الكفاءة في تقديم خدمات الإعاشة": "A model of efficiency in catering service delivery",
+    "في ظل الطلب المتزايد على خدمات الإعاشة الجماعية عالية الجودة في مختلف قطاعات المملكة، تواصل نوهة التوسع بفعالية عبر تشغيل مطابخ مركزية مجهزة بالكامل.": "As demand grows for high-quality group catering across the Kingdom's sectors, Nooha continues to expand effectively through fully equipped central kitchens.",
+    "يقع المطبخ المركزي في الرياض في منطقة السلي، ويتميز بطاقة استيعابية وإنتاجية عالية، مع التزام صارم بمعايير الجودة وسلامة الغذاء.": "The Riyadh Central Kitchen is located in Al Sulay and offers high capacity and productivity with strict commitment to quality and food safety standards.",
+    "قدرة إنتاجية": "Production Capacity",
+    "مطبخ مركزي بقدرة إنتاجية تلبي المشاريع الكبرى": "A central kitchen with production capacity for major projects",
+    "مما يجعله حلًا مثاليًا للجهات التي تحتاج إلى تموين يومي منتظم، مثل الشركات الصناعية، المراكز الطبية، سكن العمال، والوزارات.": "This makes it an ideal solution for organizations that need regular daily catering, such as industrial companies, medical centers, worker housing, and ministries.",
+    "التجهيزات": "Equipment",
+    "تصميم هندسي وتجهيزات عالمية": "Engineered design and world-class equipment",
+    "تم تصميم مطبخ الرياض المركزي وفق أعلى المواصفات العالمية، ما يجعله قادرًا على الاستجابة بسرعة ومرونة للطلبات اليومية والموسمية.": "The Riyadh Central Kitchen was designed to the highest international specifications, enabling fast and flexible response to daily and seasonal demands.",
+    "خطوط إنتاج متعددة": "Multiple Production Lines",
+    "لتقليل وقت التحضير ورفع كفاءة التشغيل اليومي.": "To reduce preparation time and improve daily operating efficiency.",
+    "أجهزة حديثة": "Modern Equipment",
+    "للطهي والتبريد والتغليف وفق متطلبات الإعاشة.": "For cooking, cooling, and packaging according to catering requirements.",
+    "أنظمة تهوية ومراقبة حرارة": "Ventilation and Temperature Monitoring Systems",
+    "لضمان البيئة المثالية في مراحل التحضير والتجهيز.": "To ensure an ideal environment during preparation and processing stages.",
+    "مسارات عمل مخصصة": "Dedicated Workflows",
+    "لفصل عمليات التحضير عن التعبئة والتسليم.": "To separate preparation from packaging and delivery operations.",
+    "الجودة الغذائية": "Food Quality",
+    "وجبات متوازنة بإشراف طهاة محترفين": "Balanced meals supervised by professional chefs",
+    "تعد وجباتنا تحت إشراف نخبة من الطهاة المحترفين ممن يتمتعون بخبرة واسعة في إعداد وجبات العمال ووجبات الموظفين وفق المعايير الصحية والغذائية العالمية.": "Our meals are prepared under the supervision of professional chefs with extensive experience preparing worker and employee meals according to global health and nutrition standards.",
+    "نأخذ في الاعتبار التنوع الثقافي في قوائم الطعام، مع الحرص على التوازن الغذائي والسعرات الحرارية. جميع مراحل الإعداد تتم وفق نظام HACCP لضمان سلامة الغذاء وجودة المخرجات.": "We consider cultural diversity in menus while maintaining nutritional balance and calorie needs. All preparation stages follow HACCP to ensure food safety and output quality.",
+    "الوجبات الآسيوية والعربية والخليجية.": "Asian, Arabic, and Gulf meals.",
+    "الأطباق الهندية والباكستانية حسب احتياج المواقع.": "Indian and Pakistani dishes according to site needs.",
+    "خيارات نباتية ووجبات خاصة عند الطلب.": "Vegetarian options and special meals on request.",
+    "طاقة إنتاجية يومية ضخمة": "Large daily production capacity",
+    "مطبخ مركزي مجهز بالكامل": "Fully equipped central kitchen",
+    "إشراف من طهاة محترفين وفريق جودة": "Supervision by professional chefs and a quality team",
+    "تنوع في القوائم ومرونة في التقديم": "Menu diversity and flexible service",
+    "التزام بمعايير السلامة والنظافة": "Commitment to safety and hygiene standards",
+    "إذا كانت منشأتك تبحث عن حلول تموين تدار بانضباط تشغيلي وجودة ثابتة": "If your organization is looking for catering solutions managed with operational discipline and consistent quality",
+    "فإن فريق نوهة جاهز لدراسة متطلباتك وبناء نموذج تموين يناسب طبيعة موقعك وحجم التشغيل.": "Nooha's team is ready to study your requirements and build a catering model suited to your site and operating scale.",
+    "تبوك ضباء": "Tabuk Duba",
+    "المطبخ المركزي في تبوك ضباء": "Tabuk Duba Central Kitchen",
+    "دعم غذائي استراتيجي لمشاريع نيوم والمناطق المحيطة": "Strategic food support for NEOM projects and surrounding areas",
+    "في قلب منطقة تبوك، وتحديدًا في مدينة ضباء، يقع أحد أهم مراكز عمليات نوهة للتموين والإعاشة. تم تأسيس هذا المطبخ ليكون محطة استراتيجية متقدمة تدعم مشاريع نيوم والمشاريع التنموية المحيطة بها.": "In the heart of Tabuk, specifically in Duba, one of Nooha's most important catering operation centers is located. This kitchen was established as an advanced strategic hub supporting NEOM projects and surrounding development projects.",
+    "يعتمد مطبخ ضباء على أسطول من الشاحنات المبردة لضمان إيصال الوجبات في الوقت المحدد إلى مواقع العمل والمرافق السكنية ومقرات الشركات، مع أنظمة تتبع ومراقبة حرارية للحفاظ على جودة الطعام حتى لحظة التسليم.": "The Duba kitchen relies on a fleet of refrigerated trucks to deliver meals on time to work sites, residential facilities, and company locations, with tracking and temperature monitoring systems to preserve food quality until delivery.",
+    "موقع استراتيجي": "Strategic Location",
+    "طاقة تشغيلية عالية وموقع استراتيجي": "High Operating Capacity and Strategic Location",
+    "تم اختيار الموقع بعناية ليكون قريبًا من مواقع المشاريع الكبرى، مما يقلل زمن التوصيل ويزيد من كفاءة سلسلة الإمداد الغذائي، خصوصًا في مشاريع تتطلب استجابة فورية وسعة إنتاج ضخمة.": "The location was carefully selected near major project sites, reducing delivery times and improving food supply chain efficiency, especially for projects requiring immediate response and large production capacity.",
+    "خدمة تموين متكاملة لمشاريع نيوم": "Integrated Catering Service for NEOM Projects",
+    "من خلال مطبخ ضباء، تقدم نوهة خدمات تموين يومية لعدد من المشاريع الحيوية، ضمن أنظمة غذائية متوازنة وتحت إشراف طهاة محترفين وفريق جودة وسلامة متخصص.": "Through the Duba kitchen, Nooha provides daily catering for vital projects within balanced meal systems supervised by professional chefs and a specialized quality and safety team.",
+    "العاملة في مشاريع نيوم ومواقع الإنشاء.": "working on NEOM projects and construction sites.",
+    "معسكرات العمال": "Worker Camps",
+    "في مواقع الإنشاء والتطوير والمرافق السكنية.": "at construction, development, and residential facilities.",
+    "المرافق الإدارية": "Administrative Facilities",
+    "والخدمية التي تحتاج إلى وجبات منتظمة.": "and service facilities that need regular meals.",
+    "الفنادق المؤقتة": "Temporary Hotels",
+    "ومساكن الموظفين داخل نطاق المشاريع.": "and staff housing within project areas.",
+    "مشاريع البنية التحتية": "Infrastructure Projects",
+    "والمرافق الصناعية ذات التشغيل اليومي.": "and industrial facilities with daily operations.",
+    "القوائم الغذائية": "Menus",
+    "تنوع في القوائم وتخصيص حسب الحاجة": "Menu diversity and customization as needed",
+    "ندرك أن العاملين في مشاريع مثل نيوم يمثلون خلفيات متعددة وثقافات متنوعة، لذلك نوفر قوائم طعام مخصصة يتم إعدادها بالتعاون مع أخصائيي تغذية وطهاة محترفين لضمان التوازن بين المذاق والجودة الغذائية.": "We understand that workers on projects such as NEOM represent different backgrounds and cultures, so we provide customized menus prepared with nutrition specialists and professional chefs to balance taste and nutritional quality.",
+    "الوجبات الآسيوية.": "Asian meals.",
+    "المأكولات العربية والخليجية.": "Arabic and Gulf dishes.",
+    "الأطباق الهندية والباكستانية.": "Indian and Pakistani dishes.",
+    "خيارات نباتية ووجبات طبية خاصة عند الطلب.": "Vegetarian options and special medical meals on request.",
+    "موقع استراتيجي يخدم مشاريع نيوم": "Strategic location serving NEOM projects",
+    "إنتاج يومي يصل إلى 12,000 وجبة": "Daily production up to 12,000 meals",
+    "خبرة في تموين العمالة والمشاريع الصناعية": "Experience catering for labor and industrial projects",
+    "تنوع في قوائم الطعام": "Diverse menus",
+    "التزام صارم بمعايير HACCP وسلامة الغذاء": "Strict commitment to HACCP and food safety standards",
+    "خدمات توصيل موثوقة وسريعة": "Reliable and fast delivery services",
+    "مكة المكرمة": "Makkah",
+    "فرع مخصص لخدمة احتياج مواقع مكة والمناطق المحيطة بخدمات تموين وإعاشة مرنة.": "A dedicated branch serving Makkah and surrounding sites with flexible catering and support services.",
+    "خدمة قريبة من مواقع التشغيل": "Service close to operating sites",
+    "يدعم فرع مكة أعمال التموين للمواقع التي تحتاج إلى سرعة استجابة وتنظيم في تجهيز الطلبات، خصوصًا في المواسم وفترات كثافة الطلب.": "The Makkah branch supports catering operations for sites that need fast response and organized order preparation, especially during seasons and high-demand periods.",
+    "يركز الفرع على تنسيق الطلبات اليومية، متابعة الاحتياج، وتجهيز نموذج خدمة يناسب طبيعة الموقع وعدد المستفيدين.": "The branch focuses on coordinating daily orders, following up on needs, and preparing a service model suited to each site's nature and beneficiary count.",
+    "نطاق فرع مكة": "Makkah Branch Scope",
+    "حلول تشغيلية للمواقع والضيافة": "Operational solutions for sites and hospitality",
+    "تموين يومي": "Daily Catering",
+    "خدمة وجبات مخصصة حسب طبيعة الموقع.": "Customized meal service according to site needs.",
+    "ضيافة موسمية": "Seasonal Hospitality",
+    "مرونة في خدمة المواسم وفترات الطلب العالي.": "Flexibility during seasons and high-demand periods.",
+    "تجهيز وتسليم": "Preparation and Delivery",
+    "تنظيم التحضير والتعبئة والتسليم.": "Organizing preparation, packaging, and delivery.",
+    "متابعة تشغيل": "Operations Follow-up",
+    "متابعة يومية لضمان استقرار الخدمة.": "Daily follow-up to ensure service stability.",
+    "خدمات تموين وإعاشة قابلة للتخصيص حسب طبيعة كل موقع.": "Catering and support services customizable to each site.",
+    "فرع داعم لسلاسل الإمداد والتوريد والتجهيز اللوجستي لخدمات نوهة.": "A branch supporting supply chains, procurement, and logistics for Nooha services.",
+    "الاستيراد والتصدير": "Import and Export",
+    "دعم لوجستي وسلاسل إمداد منظمة": "Logistics support and organized supply chains",
+    "يدعم فرع الرياض أعمال الاستيراد والتصدير والتوريد، بما يساعد على توفير المواد والاحتياجات التشغيلية لخدمات التموين والإعاشة.": "The Riyadh branch supports import, export, and supply activities, helping provide materials and operating needs for catering services.",
+    "يعزز الفرع قدرة نوهة على تنسيق الإمداد، متابعة الموردين، وخدمة المواقع عبر نموذج تشغيل واضح وقابل للتوسع.": "The branch strengthens Nooha's ability to coordinate supply, follow up with suppliers, and serve sites through a clear, scalable operating model.",
+    "دور الفرع": "Branch Role",
+    "حلقة إمداد تخدم عمليات التموين": "A supply link supporting catering operations",
+    "يركز فرع الرياض على دعم الجاهزية التشغيلية عبر التوريد، التنسيق، والمتابعة اللوجستية.": "The Riyadh branch focuses on operational readiness through supply, coordination, and logistics follow-up.",
+    "مواد واحتياجات تشغيل": "Materials and Operating Needs",
+    "تنسيق": "Coordination",
+    "متابعة موردين": "Supplier Follow-up",
+    "توصيل": "Delivery",
+    "دعم حركة الإمداد": "Supply Movement Support",
+    "خدمات الفرع": "Branch Services",
+    "استيراد وتصدير وتنسيق لوجستي": "Import, export, and logistics coordination",
+    "استيراد": "Import",
+    "متابعة احتياجات المواد والتوريد.": "Following up on material and supply needs.",
+    "تصدير": "Export",
+    "تنظيم العمليات المرتبطة بحركة المنتجات.": "Organizing operations related to product movement.",
+    "إمداد": "Supply",
+    "دعم تجهيزات الفروع والمواقع.": "Supporting branch and site readiness.",
+    "متابعة": "Follow-up",
+    "تنسيق الموردين وجدولة الاحتياج.": "Coordinating suppliers and scheduling requirements.",
+    "فرع الرياض يدعم سلاسل الإمداد والتوريد لخدمات نوهة.": "The Riyadh branch supports supply chains and procurement for Nooha services.",
+    "لقطات من المطابخ المركزية، تجهيز الوجبات، التخزين، النقل، وخدمات الإعاشة.": "Scenes from central kitchens, meal preparation, storage, transport, and catering services.",
+    "نوهة للإعاشة وخدمات التموين": "Nooha Catering and Food Services",
+    "نظرة منظمة على خبراتنا التشغيلية، خدماتنا، مطابخنا المركزية، والقطاعات التي نخدمها يوميًا.": "An organized overview of our operating experience, services, central kitchens, and sectors we serve daily.",
+    "نوهة للإعاشة | Catering Service": "Nooha Catering | Catering Service",
+    "جاهز للعرض": "Ready to Present",
+    "ملف تعريفي مختصر يشرح قدرات نوهة التشغيلية": "A concise profile explaining Nooha's operating capabilities",
+    "يعرض هذا الملف نموذج عمل نوهة في خدمات التموين والإعاشة، من تشغيل المطابخ المركزية وإعداد الوجبات اليومية إلى إدارة الإمداد والتوصيل وخدمة مواقع العمل في مختلف القطاعات.": "This profile presents Nooha's operating model in catering services, from central kitchen operations and daily meal preparation to supply, delivery, and service for work sites across sectors.",
+    "تم ترتيبه ليكون قريبًا من المرجع الذي أرسلته: زر واضح في الهيدر، صفحة تعريفية مباشرة، وإحصائيات مختصرة يمكن ربطها لاحقًا بملف PDF رسمي عند توفره.": "It is arranged to match the reference you shared: a clear header button, a direct profile page, and concise statistics that can later link to an official PDF when available.",
+    "مطابخ مركزية": "Central Kitchens",
+    "لا يوجد ملف PDF داخل المشروع حاليًا، لذلك تم تجهيز صفحة الملف التعريفي كرابط صحيح بدل رابط الشهادات السابق.": "There is no PDF file in the project currently, so the company profile page has been prepared as the correct destination instead of the previous certificates link.",
+    "طلب نسخة الملف التعريفي": "Request a Copy of the Company Profile",
+    "تشغيل ميداني منظم يناسب مواقع العمل والسكن والمشاريع طويلة المدى.": "Organized field operations suitable for work sites, housing, and long-term projects.",
+    "إعداد يومي للوجبات من مطابخ مركزية مجهزة مع ضبط الجودة والتوصيل.": "Daily meal preparation from equipped central kitchens with quality control and delivery.",
+    "حلول مساندة تشمل التشغيل، الضيافة، الإمداد، ومتابعة احتياج الموقع.": "Supporting solutions covering operations, hospitality, supply, and site needs follow-up.",
+    "سجل الشركة": "Company Record",
+    "أحدث الأخبار والإنجازات": "Latest News and Achievements",
+    "مساحة داخل الملف التعريفي لتوثيق أي تحديث جديد، إنجاز سابق، اعتماد، توسع تشغيلي، أو خبر مهم بنفس طريقة السيرة الذاتية للشركة.": "A section within the profile for documenting any new update, past achievement, accreditation, operational expansion, or important news in the style of a company resume.",
+    "أفضل شركات تموين الرياض للشركات والمؤسسات | نوهة 2026": "Best Catering Companies in Riyadh for Companies and Institutions | Nooha 2026",
+    "المطبخ المركزي في المدينة المنورة | تجهيز يومي وخدمة تشغيلية موثوقة": "Madinah Central Kitchen | Daily Preparation and Reliable Operations",
+    "خدمات الإعاشة في السعودية 2026 | حلول مخصصة من نوهة": "Catering Services in Saudi Arabia 2026 | Customized Solutions from Nooha",
+    "خدمات الإعاشة والتموين 2026 | شراكة تصنع موثوقية مع العميل": "Catering and Food Supply Services 2026 | A Partnership Built on Reliability",
+    "لماذا تختار نوهة كأفضل شركة إعاشة وتموين للمشروعات؟": "Why Choose Nooha as the Best Catering Company for Projects?",
+    "كيف تدير نوهة التموين والإعاشة بنجاح؟ حلول للمشاريع الكبرى": "How Does Nooha Manage Catering Successfully? Solutions for Major Projects"
+  },
+  attrs: {
+    "نوها للإعاشة": "Nooha Catering",
+    "القائمة الرئيسية": "Main navigation",
+    "واتساب": "WhatsApp",
+    "إحصائيات نوهة": "Nooha statistics",
+    "عملاء وشركاء": "Clients and partners",
+    "فريق نوها داخل مطبخ احترافي": "Nooha team inside a professional kitchen",
+    "فريق نوهة داخل مطبخ احترافي": "Nooha team inside a professional kitchen",
+    "خدمات التموين": "Catering services",
+    "مطابخ وتجهيزات نوهة": "Nooha kitchens and equipment",
+    "مطبخ مركزي": "Central kitchen",
+    "مطابخ مركزية أخرى": "Other central kitchens",
+    "فروع نوهة": "Nooha branches",
+    "فريق نوهة داخل مطبخ مركزي": "Nooha team inside a central kitchen",
+    "غرفة تبريد وتخزين في المطبخ المركزي": "Cooling and storage room in the central kitchen",
+    "شاحنة نوهة لخدمات التموين": "Nooha catering truck",
+    "غرفة تخزين وتبريد داخل مطبخ مركزي": "Storage and cooling room inside a central kitchen",
+    "فريق تشغيل داخل مطبخ مركزي": "Operations team inside a central kitchen",
+    "شاحنة نوهة المجهزة لخدمات التموين والتوصيل": "Nooha truck equipped for catering and delivery",
+    "تجهيز طلبات التموين في فرع مكة": "Preparing catering orders at the Makkah branch",
+    "مطبخ نوهة المركزي": "Nooha central kitchen",
+    "شاحنة نوهة لخدمات النقل والإمداد": "Nooha transport and supply truck",
+    "تجهيزات نوهة التشغيلية": "Nooha operating equipment",
+    "معرض صور نوهة": "Nooha photo gallery",
+    "خط طهي داخل مطبخ مركزي": "Cooking line inside a central kitchen",
+    "طهاة داخل مطبخ احترافي": "Chefs inside a professional kitchen",
+    "تجهيز وجبات يومية للتوصيل": "Preparing daily meals for delivery",
+    "وجبات معبأة في صواني": "Meals packed in trays",
+    "فريق مطبخ يجهز الأطباق": "Kitchen team preparing dishes",
+    "شاحنة توصيل مبردة لخدمات التموين": "Refrigerated delivery truck for catering services",
+    "بوفيه تقديم متنوع": "Varied buffet service",
+    "غرفة تخزين مبردة": "Chilled storage room",
+    "تحضير أطباق داخل مطبخ تجاري": "Preparing dishes inside a commercial kitchen",
+    "أرز مجهز في صواني مطبخ": "Rice prepared in kitchen trays",
+    "تجهيزات مطبخ مركزي": "Central kitchen equipment",
+    "خدمة بوفيه فندقي": "Hotel buffet service",
+    "ثلاجات تخزين للمواد الغذائية": "Food storage refrigerators",
+    "اختيارات طعام داخل صواني معدنية": "Food selections in metal trays",
+    "بوفيه أطعمة متنوع": "Varied food buffet",
+    "تجهيز وتعبئة في فرع الاستيراد والتصدير": "Preparation and packing at the import and export branch",
+    "محطة بوفيه في قاعة طعام": "Buffet station in a dining hall",
+    "فرع مكة وتجهيزات التموين": "Makkah branch and catering equipment",
+    "شركة أمثال": "Amthal Company",
+    "مجموعة العالمية": "Alalameya Group",
+    "وزارة الحج - جمهورية إندونيسيا": "Ministry of Hajj - Republic of Indonesia",
+    "أمجاد الفلاح": "Amjad Al Falah",
+    "شركة إعلاء جدة التجارية": "Ielaa Jeddah Trading Company",
+    "خط الطبخ الساخن في المطبخ المركزي": "Hot cooking line in the central kitchen",
+    "تجهيز وتحضير طلبات التموين": "Preparing catering orders",
+    "تجهيز وتحضير طلبات التموين قبل التسليم": "Preparing catering orders before delivery",
+    "شاحنة نوهة للاستيراد والتصدير والتوصيل": "Nooha import, export, and delivery truck",
+    "طاقم عمل نوهة أثناء تقديم الخدمات في أحد المشاريع الكبرى": "Nooha team delivering services at a major project",
+    "الاسم": "Name",
+    "رقم الجوال": "Mobile number",
+    "البريد الإلكتروني": "Email",
+    "فريق عمل داخل مطبخ احترافي": "Team working inside a professional kitchen",
+    "مثال: جدة": "Example: Jeddah",
+    "اكتب خبرتك، المدينة المناسبة، وأقرب موعد للانضمام": "Write your experience, preferred city, and earliest joining date",
+    "غلاف الملف التعريفي": "Company profile cover",
+    "ملخص الملف التعريفي": "Company profile summary",
+    "أفضل شركات تموين الرياض": "Best catering companies in Riyadh",
+    "المطبخ المركزي في المدينة المنورة": "Madinah Central Kitchen",
+    "خدمات الإعاشة في السعودية": "Catering services in Saudi Arabia",
+    "خدمات الإعاشة والتموين": "Catering and food supply services",
+    "أفضل شركة إعاشة": "Best catering company",
+    "إدارة التموين والإعاشة": "Catering management",
+    "تصفح أخبار الملف التعريفي": "Browse company profile news",
+    "التالي": "Next",
+    "طاه يعمل داخل مطبخ احترافي": "Chef working inside a professional kitchen",
+    "طاه محترف في المطبخ": "Professional chef in the kitchen",
+    "طهي وجبات في مطبخ احترافي": "Cooking meals in a professional kitchen",
+    "ترتيب موائد ضيافة": "Arranging hospitality tables",
+    "الملف التعريفي لشركة نوهة للإعاشة وخدمات التموين والمطابخ المركزية.": "Company profile for Nooha Catering, food services, and central kitchens."
+  },
+  titles: {
+    "projects.html": ["نوهة للإعاشة | الصور", "Nooha Catering | Gallery"],
+    "central-kitchen-riyadh.html": ["نوهة للإعاشة | المطبخ المركزي في الرياض", "Nooha Catering | Riyadh Central Kitchen"],
+    "central-kitchen-tabuk-duba.html": ["نوهة للإعاشة | المطبخ المركزي في تبوك ضباء", "Nooha Catering | Tabuk Duba Central Kitchen"]
+  }
+};
+
+Object.assign(translations.text, supplementalTranslations.text);
+Object.assign(translations.attrs, supplementalTranslations.attrs);
+Object.assign(translations.titles, supplementalTranslations.titles);
 
 const reverseText = Object.fromEntries(Object.entries(translations.text).map(([ar, en]) => [en, ar]));
 const reverseAttrs = Object.fromEntries(Object.entries(translations.attrs).map(([ar, en]) => [en, ar]));
@@ -217,8 +580,8 @@ function translateTextNodes(root, dictionary) {
 }
 
 function translateAttributes(dictionary) {
-  document.querySelectorAll("[aria-label], [alt], [placeholder], meta[name='description']").forEach((element) => {
-    ["aria-label", "alt", "placeholder", "content"].forEach((attr) => {
+  document.querySelectorAll("[aria-label], [alt], [placeholder], [title], meta[name='description']").forEach((element) => {
+    ["aria-label", "alt", "placeholder", "title", "content"].forEach((attr) => {
       const value = element.getAttribute(attr);
       if (value && dictionary[value]) {
         element.setAttribute(attr, dictionary[value]);
@@ -229,7 +592,22 @@ function translateAttributes(dictionary) {
 
 function updateLanguageSwitch(language) {
   document.querySelectorAll("[data-language-switch]").forEach((switcher) => {
-    switcher.querySelectorAll("span").forEach((option) => {
+    const options = switcher.querySelectorAll("span:not(.nav-caret)");
+
+    if (!options.length) {
+      const textNode = Array.from(switcher.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
+      const label = language === "ar" ? "English" : "العربية";
+
+      if (textNode) {
+        textNode.nodeValue = label;
+      } else {
+        switcher.prepend(document.createTextNode(label));
+      }
+
+      return;
+    }
+
+    options.forEach((option) => {
       option.classList.toggle("active", option.textContent.toLowerCase() === language);
     });
   });
@@ -261,21 +639,60 @@ function setLanguageChoice(language, save = true) {
   }
 }
 
+const mobileReferenceNavQuery = window.matchMedia("(max-width: 960px)");
+const hoverReferenceNavQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+function setNavOpen(isOpen) {
+  nav?.classList.toggle("is-open", isOpen);
+  navToggle?.setAttribute("aria-expanded", String(isOpen));
+  document.body.classList.toggle("is-nav-open", Boolean(nav && isOpen));
+
+  if (!isOpen) {
+    closeReferenceMenus();
+  }
+}
+
+function isMobileReferenceTrigger(trigger) {
+  const item = trigger.closest(".reference-nav-item");
+  const panel = item?.querySelector(".reference-mega, .reference-simple-menu");
+  const firstControl = item ? Array.from(item.children).find((child) => child.matches("a, button")) : null;
+  return Boolean(mobileReferenceNavQuery.matches && panel && firstControl === trigger);
+}
+
+navToggle?.setAttribute("aria-expanded", "false");
+
 navToggle?.addEventListener("click", () => {
-  nav?.classList.toggle("is-open");
+  setNavOpen(!nav?.classList.contains("is-open"));
+});
+
+document.querySelectorAll(".reference-language").forEach((switcher) => {
+  switcher.setAttribute("data-language-switch", "");
+  switcher.closest(".reference-nav-item")?.classList.add("language-item");
 });
 
 document.querySelectorAll(".main-nav a").forEach((link) => {
-  link.addEventListener("click", () => nav?.classList.remove("is-open"));
+  link.addEventListener("click", () => {
+    if (isMobileReferenceTrigger(link)) return;
+    setNavOpen(false);
+  });
 });
 
-const referenceMenuItems = document.querySelectorAll(".reference-nav-item.has-mega, .reference-nav-item.has-simple");
+const referenceMenuItems = document.querySelectorAll(".reference-nav-item.has-mega, .reference-nav-item.has-simple:not(.language-item)");
 let referenceMenuTimer;
+
+function getReferenceTrigger(item) {
+  return Array.from(item.children).find((child) => child.matches("a, button"));
+}
+
+function setReferenceMenuOpen(item, isOpen) {
+  item.classList.toggle("is-menu-open", isOpen);
+  getReferenceTrigger(item)?.setAttribute("aria-expanded", String(isOpen));
+}
 
 function closeReferenceMenus(exceptItem = null) {
   referenceMenuItems.forEach((item) => {
     if (item !== exceptItem) {
-      item.classList.remove("is-menu-open");
+      setReferenceMenuOpen(item, false);
     }
   });
 }
@@ -283,55 +700,118 @@ function closeReferenceMenus(exceptItem = null) {
 function openReferenceMenu(item) {
   clearTimeout(referenceMenuTimer);
   closeReferenceMenus(item);
-  item.classList.add("is-menu-open");
+  setReferenceMenuOpen(item, true);
 }
 
 function scheduleReferenceMenuClose(item) {
   clearTimeout(referenceMenuTimer);
   referenceMenuTimer = setTimeout(() => {
-    item.classList.remove("is-menu-open");
+    setReferenceMenuOpen(item, false);
   }, 700);
 }
 
 referenceMenuItems.forEach((item) => {
-  const trigger = Array.from(item.children).find((child) => child.matches("a, button"));
+  const trigger = getReferenceTrigger(item);
   const panel = item.querySelector(".reference-mega, .reference-simple-menu");
 
   if (!trigger || !panel) return;
 
-  [trigger, panel].forEach((element) => {
-    element.addEventListener("mouseenter", () => openReferenceMenu(item));
-    element.addEventListener("mouseleave", () => scheduleReferenceMenuClose(item));
-    element.addEventListener("focusin", () => openReferenceMenu(item));
-    element.addEventListener("focusout", () => {
-      setTimeout(() => {
-        if (!item.contains(document.activeElement)) {
-          scheduleReferenceMenuClose(item);
-        }
-      }, 0);
-    });
+  if (!trigger.querySelector(".nav-caret")) {
+    const caret = document.createElement("span");
+    caret.className = "nav-caret";
+    caret.setAttribute("aria-hidden", "true");
+    trigger.append(caret);
+  }
+
+  trigger.setAttribute("aria-expanded", "false");
+
+  trigger.addEventListener("click", (event) => {
+    if (!mobileReferenceNavQuery.matches) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const shouldOpen = !item.classList.contains("is-menu-open");
+    closeReferenceMenus(shouldOpen ? item : null);
+    setReferenceMenuOpen(item, shouldOpen);
   });
+
+  item.addEventListener("mouseenter", () => {
+    if (mobileReferenceNavQuery.matches && !hoverReferenceNavQuery.matches) return;
+    openReferenceMenu(item);
+  });
+
+  item.addEventListener("mouseleave", () => {
+    if (mobileReferenceNavQuery.matches && !hoverReferenceNavQuery.matches) return;
+    scheduleReferenceMenuClose(item);
+  });
+
+  item.addEventListener("focusin", () => {
+    if (mobileReferenceNavQuery.matches && !hoverReferenceNavQuery.matches) return;
+    openReferenceMenu(item);
+  });
+
+  item.addEventListener("focusout", () => {
+    if (mobileReferenceNavQuery.matches && !hoverReferenceNavQuery.matches) return;
+    setTimeout(() => {
+      if (!item.contains(document.activeElement)) {
+        scheduleReferenceMenuClose(item);
+      }
+    }, 0);
+  });
+});
+
+document.querySelectorAll(".reference-nav-item:not(.has-mega):not(.has-simple), .reference-nav-item.language-item").forEach((item) => {
+  item.addEventListener("mouseenter", () => {
+    if (mobileReferenceNavQuery.matches && !hoverReferenceNavQuery.matches) return;
+    closeReferenceMenus();
+  });
+  item.addEventListener("focusin", () => closeReferenceMenus());
 });
 
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".reference-nav")) {
     closeReferenceMenus();
   }
+
+  if (nav?.classList.contains("is-open") && !event.target.closest(".reference-header")) {
+    setNavOpen(false);
+  }
 });
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    closeReferenceMenus();
+    setNavOpen(false);
   }
 });
 
 document.querySelectorAll("[data-language-switch]").forEach((switcher) => {
-  switcher.addEventListener("click", () => {
+  switcher.addEventListener("click", (event) => {
+    event.preventDefault();
     const currentLanguage = document.documentElement.lang === "en" ? "en" : "ar";
     setLanguageChoice(currentLanguage === "ar" ? "en" : "ar");
-    nav?.classList.remove("is-open");
+    setNavOpen(false);
   });
 });
+
+document.querySelectorAll(".language-menu button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const language = button.textContent.trim().toLowerCase() === "english" ? "en" : "ar";
+    setLanguageChoice(language);
+    setNavOpen(false);
+  });
+});
+
+function handleReferenceNavViewportChange(event) {
+  if (!event.matches) {
+    setNavOpen(false);
+  }
+}
+
+if (typeof mobileReferenceNavQuery.addEventListener === "function") {
+  mobileReferenceNavQuery.addEventListener("change", handleReferenceNavViewportChange);
+} else if (typeof mobileReferenceNavQuery.addListener === "function") {
+  mobileReferenceNavQuery.addListener(handleReferenceNavViewportChange);
+}
 
 const savedLanguage = localStorage.getItem("noohaLanguage");
 setLanguageChoice(savedLanguage === "en" ? "en" : "ar", false);
