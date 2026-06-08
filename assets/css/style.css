@@ -3126,9 +3126,19 @@ body:not(.home-page) .page-hero p {
   border-radius: 50%;
   color: var(--color-white);
   background: #23d366;
-  font-size: 1.45rem;
-  font-weight: 900;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.whatsapp-float:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.26);
+}
+
+.whatsapp-float svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
 }
 
 @media (max-width: 1120px) {
