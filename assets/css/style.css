@@ -274,7 +274,7 @@ textarea {
   color: var(--color-white);
   background:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg") center/cover no-repeat;
 }
 
 .hero-overlay {
@@ -749,13 +749,16 @@ textarea {
   color: var(--color-white);
   background:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg") center/cover no-repeat;
 }
 
 .services-hero {
   background-image:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1800&q=80");
+    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80");
+  background-position: center, left center;
+  background-size: auto, 180% auto;
+  background-repeat: no-repeat;
 }
 
 .projects-hero {
@@ -768,19 +771,19 @@ textarea {
 .contact-hero {
   background-image:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/nooha-branded-delivery-truck-01.jpeg");
 }
 
 .profile-hero {
   background-image:
     linear-gradient(90deg, rgba(13, 46, 55, 0.72), rgba(13, 13, 13, 0.46)),
-    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
 }
 
 .careers-hero {
   background-image:
     linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
 }
 
 .madinah-kitchen-hero {
@@ -804,13 +807,13 @@ textarea {
 .riyadh-kitchen-hero {
   background-image:
     linear-gradient(90deg, rgba(13, 46, 55, 0.72), rgba(13, 13, 13, 0.46)),
-    url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
 }
 
 .tabuk-kitchen-hero {
   background-image:
     linear-gradient(90deg, rgba(13, 46, 55, 0.74), rgba(13, 13, 13, 0.42)),
-    url("https://images.unsplash.com/photo-1584467735871-8a412e316eeb?auto=format&fit=crop&w=1800&q=80");
+    url("../../public/images/real/delivery-preparation-01.jpeg");
 }
 
 .two-columns,
@@ -1002,21 +1005,69 @@ textarea {
   font-weight: 900;
 }
 
+.document-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.document-card p {
+  flex: 1;
+}
+
+.contact-section {
+  background:
+    linear-gradient(180deg, rgba(250, 247, 242, 0.74), rgba(255, 255, 255, 0.96)),
+    var(--color-bg);
+}
+
+.contact-layout {
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.contact-form,
+.contact-info {
+  border: 1px solid rgba(18, 69, 89, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 45px rgba(13, 46, 55, 0.08);
+}
+
 .contact-form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  padding: 30px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--card-bg);
-  box-shadow: var(--shadow-md);
+  gap: 18px 16px;
+  padding: 32px;
+}
+
+.form-heading {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(18, 69, 89, 0.1);
+}
+
+.form-heading span {
+  color: var(--color-accent);
+  font-weight: 900;
+}
+
+.form-heading h2 {
+  margin: 8px 0 6px;
+  color: var(--color-ink);
+  font-size: 1.45rem;
+}
+
+.form-heading p {
+  margin: 0;
+  color: var(--color-muted);
 }
 
 .contact-form label {
   display: grid;
   gap: 8px;
+  min-width: 0;
   color: var(--color-ink);
+  font-size: 0.94rem;
   font-weight: 900;
 }
 
@@ -1028,12 +1079,13 @@ textarea {
 .contact-form select,
 .contact-form textarea {
   width: 100%;
-  border: 1px solid var(--color-border);
+  min-height: 54px;
+  border: 1px solid rgba(18, 69, 89, 0.15);
   border-radius: var(--radius-sm);
-  padding: 14px 15px;
+  padding: 12px 14px;
   color: var(--color-ink);
-  background: var(--color-surface);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  background: var(--color-white);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
 }
 
 .contact-form input:focus,
@@ -1041,47 +1093,107 @@ textarea {
 .contact-form textarea:focus {
   outline: none;
   border-color: var(--color-accent);
+  background: #fffdf9;
   box-shadow: 0 0 0 4px rgba(217, 161, 59, 0.16);
 }
 
 .contact-form textarea {
+  min-height: 148px;
   resize: vertical;
 }
 
-.contact-info {
-  padding: 34px;
-  border: 1px solid rgba(217, 161, 59, 0.2);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.76), var(--accent-wash-soft)),
-    var(--color-surface-muted);
-}
-
-.info-list {
-  display: grid;
-  gap: 10px;
-  margin: 24px 0;
-}
-
-.info-list span {
-  padding: 13px 15px;
-  border: 1px solid rgba(18, 69, 89, 0.08);
+.contact-submit {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-width: 180px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.72);
+}
+
+.contact-info {
+  overflow: hidden;
+  padding: 0;
+}
+
+.contact-info h2 {
+  margin: 0;
+  padding: 30px 30px 8px;
+  font-size: 1.75rem;
+}
+
+.contact-info p {
+  margin: 0;
+  padding: 0 30px;
+}
+
+.contact-methods {
+  display: grid;
+  gap: 12px;
+  margin: 24px 30px;
+}
+
+.contact-method {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  min-height: 74px;
+  padding: 12px;
+  border: 1px solid rgba(18, 69, 89, 0.12);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  background: linear-gradient(180deg, #fff, rgba(250, 247, 242, 0.7));
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+a.contact-method:hover {
+  border-color: rgba(217, 161, 59, 0.48);
+  box-shadow: 0 12px 26px rgba(13, 46, 55, 0.09);
+  transform: translateY(-2px);
+}
+
+.contact-method-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  background: var(--color-soft-accent);
+}
+
+.contact-method-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.contact-method small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-muted);
+  font-weight: 900;
+}
+
+.contact-method strong {
+  display: block;
+  color: var(--color-ink);
+  font-size: 0.98rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .contact-map {
   overflow: hidden;
+  margin: 0 30px 18px;
   border: 1px solid rgba(18, 69, 89, 0.12);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--color-white);
-  box-shadow: var(--shadow-sm);
 }
 
 .contact-map iframe {
   display: block;
   width: 100%;
-  min-height: 260px;
+  min-height: 240px;
   border: 0;
 }
 
@@ -1089,7 +1201,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
+  min-height: 48px;
   padding: 0 18px;
   color: var(--color-primary-deep);
   background: var(--brand-gold);
@@ -1103,26 +1215,45 @@ textarea {
 }
 
 .social-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.social-row a {
   display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-pill);
-  color: var(--brand-dark);
-  background: var(--color-accent);
-  font-weight: 900;
-  transition: transform var(--transition-base), background var(--transition-base);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 30px 30px;
 }
 
-.social-row a:hover {
-  background: var(--color-accent-hover);
-  transform: translateY(-3px);
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 900;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), filter var(--transition-base);
+}
+
+.social-link svg {
+  width: 23px;
+  height: 23px;
+  fill: currentColor;
+}
+
+.social-link-instagram {
+  color: var(--color-white);
+  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 42%, #8134af 72%, #515bd4 100%);
+}
+
+.social-link-snapchat {
+  color: #111827;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  background: #fffc00;
+}
+
+.social-link:hover {
+  filter: saturate(1.05);
+  box-shadow: 0 14px 26px rgba(13, 46, 55, 0.13);
+  transform: translateY(-2px);
 }
 
 .kitchen-intro-section {
@@ -1145,7 +1276,7 @@ textarea {
   color: var(--color-white);
   background:
     linear-gradient(90deg, rgba(126, 164, 83, 0.78), rgba(126, 164, 83, 0.58)),
-    url("https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/delivery-preparation-01.jpeg") center/cover no-repeat;
 }
 
 .kitchen-capacity .section-heading {
@@ -1222,7 +1353,7 @@ textarea {
   color: var(--color-white);
   background:
     linear-gradient(180deg, rgba(126, 164, 83, 0.86), rgba(126, 164, 83, 0.82)),
-    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80") center/cover no-repeat;
+    url("../../public/images/real/delivery-preparation-01.jpeg") center/cover no-repeat;
   box-shadow: var(--shadow-sm);
 }
 
@@ -1359,7 +1490,7 @@ textarea {
   padding: 76px 0;
   background:
     linear-gradient(90deg, rgba(18, 69, 89, 0.54), rgba(18, 69, 89, 0.32)),
-    url("https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg") center/cover no-repeat;
 }
 
 .kitchen-cta-card {
@@ -1818,24 +1949,27 @@ textarea {
 }
 
 .home-metrics-band {
-  padding: 72px 0;
+  padding: 76px 0;
   color: var(--color-white);
   background:
     linear-gradient(90deg, rgba(18, 69, 89, 0.88), rgba(18, 69, 89, 0.78)),
-    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/central-kitchen-hot-line-01.jpeg") center/cover no-repeat;
 }
 
 .home-metrics-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px;
+  gap: clamp(10px, 1vw, 14px);
+  align-items: stretch;
 }
 
 .home-metric {
   display: grid;
   place-items: center;
   min-height: 108px;
-  padding: 16px 10px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 16px 8px;
   border-radius: var(--radius-sm);
   background: #a9c77e;
   text-align: center;
@@ -1845,10 +1979,12 @@ textarea {
 .home-metric strong {
   direction: ltr;
   unicode-bidi: isolate;
+  max-width: 100%;
   color: var(--color-white);
-  font-size: clamp(1.85rem, 2.65vw, 2.65rem);
+  font-size: clamp(1.75rem, 2.35vw, 2.45rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.05;
+  white-space: nowrap;
 }
 
 .home-metric span {
@@ -2342,11 +2478,34 @@ textarea {
   }
 
   .contact-form,
-  .contact-info,
   .cta-wrap,
   .home-quote-form,
   .kitchen-cta-card {
     padding: 22px;
+  }
+
+  .contact-info {
+    padding: 0;
+  }
+
+  .contact-info h2 {
+    padding: 24px 22px 8px;
+  }
+
+  .contact-info p,
+  .contact-methods,
+  .contact-map,
+  .social-row {
+    margin-right: 22px;
+    margin-left: 22px;
+  }
+
+  .contact-info p {
+    padding: 0;
+  }
+
+  .social-row {
+    grid-template-columns: 1fr;
   }
 
   .home-announcement .container {
@@ -3028,7 +3187,7 @@ body:not(.home-page) .page-hero p {
   color: var(--color-white);
   background:
     linear-gradient(90deg, rgba(13, 13, 13, 0.55), rgba(18, 69, 89, 0.72)),
-    url("https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+    url("../../public/images/real/delivery-preparation-01.jpeg") center/cover no-repeat;
 }
 
 .home-video-hero::after {
