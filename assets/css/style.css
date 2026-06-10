@@ -3386,8 +3386,9 @@ body:not(.home-page) .page-hero p {
   }
 
   .reference-header {
-    z-index: 110;
-    overflow-x: clip;
+    --reference-mobile-nav-top: 122px;
+    z-index: 180;
+    overflow: visible;
   }
 
   .reference-topbar {
@@ -3444,18 +3445,19 @@ body:not(.home-page) .page-hero p {
   }
 
   .reference-header .reference-nav {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: clamp(18px, 5vw, 28px);
-    left: auto;
-    z-index: 120;
+    position: fixed;
+    top: var(--reference-mobile-nav-top);
+    right: clamp(14px, 4vw, 22px);
+    left: clamp(14px, 4vw, 22px);
+    inset-inline: clamp(14px, 4vw, 22px);
+    z-index: 220;
     display: none;
     align-items: stretch;
     flex-direction: column;
     gap: 6px;
-    width: min(360px, calc(100vw - clamp(36px, 10vw, 56px)));
-    max-height: calc(100vh - 150px);
-    max-height: calc(100dvh - 150px);
+    width: auto;
+    max-height: calc(100vh - var(--reference-mobile-nav-top) - 14px);
+    max-height: calc(100dvh - var(--reference-mobile-nav-top) - 14px);
     padding: 10px;
     border: 1px solid rgba(242, 217, 187, 0.24);
     border-radius: 8px;
@@ -3471,6 +3473,10 @@ body:not(.home-page) .page-hero p {
   .reference-header .reference-nav.is-open {
     display: flex;
     animation: mobile-nav-in 180ms ease both;
+  }
+
+  body.is-nav-open .reference-header .reference-nav {
+    display: flex;
   }
 
   .reference-nav-item {
