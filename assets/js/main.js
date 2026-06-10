@@ -677,7 +677,9 @@ function isMobileReferenceTrigger(trigger) {
 
 navToggle?.setAttribute("aria-expanded", "false");
 
-navToggle?.addEventListener("click", () => {
+navToggle?.addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
   setNavOpen(!nav?.classList.contains("is-open"));
 });
 
@@ -785,11 +787,21 @@ document.querySelectorAll(".reference-nav-item:not(.has-mega):not(.has-simple), 
 });
 
 document.addEventListener("click", (event) => {
-  if (!event.target.closest(".reference-nav")) {
+  const target = event.target;
+
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  if (navToggle?.contains(target)) {
+    return;
+  }
+
+  if (!target.closest(".reference-nav")) {
     closeReferenceMenus();
   }
 
-  if (nav?.classList.contains("is-open") && !event.target.closest(".reference-header")) {
+  if (nav?.classList.contains("is-open") && !target.closest("[data-header]")) {
     setNavOpen(false);
   }
 });
