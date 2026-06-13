@@ -197,7 +197,7 @@ const translations = {
     "careers.html": ["نوهة للإعاشة | التوظيف", "Nooha Catering | Careers"],
     "central-kitchen-madinah.html": ["نوهة للإعاشة | المطبخ المركزي في المدينة المنورة", "Nooha Catering | Madinah Central Kitchen"],
     "makkah-branch.html": ["نوهة للإعاشة | فرع مكة", "Nooha Catering | Makkah Branch"],
-    "riyadh-import-export.html": ["نوهة للإعاشة | فرع الاستيراد والتصدير في الرياض", "Nooha Catering | Riyadh Import and Export Branch"],
+    "riyadh-import-export.html": ["نوهة للإعاشة | فرع الاستيراد والتصدير في المدينة المنورة", "Nooha Catering | Madinah Import and Export Branch"],
     "contact.html": ["نوهة للإعاشة | تواصل معنا", "Nooha Catering | Contact"]
   },
   messages: {
@@ -220,7 +220,7 @@ const supplementalTranslations = {
     "نوهة للإعاشة | المطبخ المركزي في الرياض": "Nooha Catering | Riyadh Central Kitchen",
     "نوهة للإعاشة | المطبخ المركزي في تبوك ضباء": "Nooha Catering | Tabuk Duba Central Kitchen",
     "نوهة للإعاشة | فرع مكة": "Nooha Catering | Makkah Branch",
-    "نوهة للإعاشة | فرع الاستيراد والتصدير في الرياض": "Nooha Catering | Riyadh Import and Export Branch",
+    "نوهة للإعاشة | فرع الاستيراد والتصدير في المدينة المنورة": "Nooha Catering | Madinah Import and Export Branch",
     "عن نوها": "About Nooha",
     "عن نوهة": "About Nooha",
     "نوها في سطور": "Nooha at a Glance",
@@ -237,7 +237,7 @@ const supplementalTranslations = {
     "خدمات الإعاشة المساندة": "Supporting Catering Services",
     "المطبخ المركزي في المدينة المنورة": "Madinah Central Kitchen",
     "فرع مكة": "Makkah Branch",
-    "فرع الاستيراد والتصدير في الرياض": "Riyadh Import and Export Branch",
+    "فرع الاستيراد والتصدير في المدينة المنورة": "Madinah Import and Export Branch",
     "المعرض": "Gallery",
     "الصور": "Photos",
     "مدونات": "Blog",
@@ -437,11 +437,11 @@ const supplementalTranslations = {
     "فرع داعم لسلاسل الإمداد والتوريد والتجهيز اللوجستي لخدمات نوهة.": "A branch supporting supply chains, procurement, and logistics for Nooha services.",
     "الاستيراد والتصدير": "Import and Export",
     "دعم لوجستي وسلاسل إمداد منظمة": "Logistics support and organized supply chains",
-    "يدعم فرع الرياض أعمال الاستيراد والتصدير والتوريد، بما يساعد على توفير المواد والاحتياجات التشغيلية لخدمات التموين والإعاشة.": "The Riyadh branch supports import, export, and supply activities, helping provide materials and operating needs for catering services.",
+    "يدعم فرع المدينة المنورة أعمال الاستيراد والتصدير والتوريد، بما يساعد على توفير المواد والاحتياجات التشغيلية لخدمات التموين والإعاشة.": "The Madinah branch supports import, export, and supply activities, helping provide materials and operating needs for catering services.",
     "يعزز الفرع قدرة نوهة على تنسيق الإمداد، متابعة الموردين، وخدمة المواقع عبر نموذج تشغيل واضح وقابل للتوسع.": "The branch strengthens Nooha's ability to coordinate supply, follow up with suppliers, and serve sites through a clear, scalable operating model.",
     "دور الفرع": "Branch Role",
     "حلقة إمداد تخدم عمليات التموين": "A supply link supporting catering operations",
-    "يركز فرع الرياض على دعم الجاهزية التشغيلية عبر التوريد، التنسيق، والمتابعة اللوجستية.": "The Riyadh branch focuses on operational readiness through supply, coordination, and logistics follow-up.",
+    "يركز فرع المدينة المنورة على دعم الجاهزية التشغيلية عبر التوريد، التنسيق، والمتابعة اللوجستية.": "The Madinah branch focuses on operational readiness through supply, coordination, and logistics follow-up.",
     "مواد واحتياجات تشغيل": "Materials and Operating Needs",
     "تنسيق": "Coordination",
     "متابعة موردين": "Supplier Follow-up",
@@ -457,7 +457,7 @@ const supplementalTranslations = {
     "دعم تجهيزات الفروع والمواقع.": "Supporting branch and site readiness.",
     "متابعة": "Follow-up",
     "تنسيق الموردين وجدولة الاحتياج.": "Coordinating suppliers and scheduling requirements.",
-    "فرع الرياض يدعم سلاسل الإمداد والتوريد لخدمات نوهة.": "The Riyadh branch supports supply chains and procurement for Nooha services.",
+    "فرع المدينة المنورة يدعم سلاسل الإمداد والتوريد لخدمات نوهة.": "The Madinah branch supports supply chains and procurement for Nooha services.",
     "لقطات من المطابخ المركزية، تجهيز الوجبات، التخزين، النقل، وخدمات الإعاشة.": "Scenes from central kitchens, meal preparation, storage, transport, and catering services.",
     "نوهة للإعاشة وخدمات التموين": "Nooha Catering and Food Services",
     "نظرة منظمة على خبراتنا التشغيلية، خدماتنا، مطابخنا المركزية، والقطاعات التي نخدمها يوميًا.": "An organized overview of our operating experience, services, central kitchens, and sectors we serve daily.",
@@ -568,6 +568,13 @@ const supplementalTranslations = {
 Object.assign(translations.text, supplementalTranslations.text);
 Object.assign(translations.attrs, supplementalTranslations.attrs);
 Object.assign(translations.titles, supplementalTranslations.titles);
+Object.assign(translations.text, {
+  "أرسل الاحتياج الأساسي، وسيتم فتح واتساب برسالة جاهزة مع إرسال نسخة على البريد.": "Send the basic request details. WhatsApp will open with a ready message, and an email copy will be sent.",
+  "تواصل معنا عبر واتساب أو البريد الإلكتروني أو حسابات التواصل الرسمية.": "Contact us through WhatsApp, email, or official social channels.",
+  "واتساب": "WhatsApp",
+  "إرسال وفتح واتساب": "Send and open WhatsApp",
+  "إرسال الطلب وفتح واتساب": "Send request and open WhatsApp"
+});
 
 const reverseText = Object.fromEntries(Object.entries(translations.text).map(([ar, en]) => [en, ar]));
 const reverseAttrs = Object.fromEntries(Object.entries(translations.attrs).map(([ar, en]) => [en, ar]));
@@ -880,6 +887,9 @@ filterGroup?.addEventListener("click", (event) => {
 });
 
 const contactEmail = "nooha2040@gmail.com";
+const contactWhatsAppNumber = "966537158296";
+const contactPhoneDisplay = "+966 53 715 8296";
+const formSubmitEndpoint = `https://formsubmit.co/ajax/${contactEmail}`;
 
 const formFieldLabels = {
   ar: {
@@ -934,27 +944,203 @@ function buildContactMessage(form, language) {
   return lines.join("\n");
 }
 
+function getDefaultWhatsAppMessage(language) {
+  return language === "en"
+    ? "Hello Nooha, I would like to discuss a catering service request."
+    : "السلام عليكم، أود التواصل مع شركة نوهة بخصوص طلب خدمة.";
+}
+
+function buildWhatsAppUrl(message) {
+  return `https://wa.me/${contactWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+}
+
+function openWhatsAppMessage(message) {
+  const url = buildWhatsAppUrl(message);
+  const whatsappWindow = window.open(url, "_blank");
+
+  if (whatsappWindow) {
+    whatsappWindow.opener = null;
+  }
+
+  return {
+    opened: Boolean(whatsappWindow),
+    url
+  };
+}
+
+function syncWhatsAppLinks() {
+  const language = document.documentElement.lang === "en" ? "en" : "ar";
+  const defaultMessage = getDefaultWhatsAppMessage(language);
+  const defaultUrl = buildWhatsAppUrl(defaultMessage);
+  const label = language === "en" ? `WhatsApp ${contactPhoneDisplay}` : `واتساب ${contactPhoneDisplay}`;
+
+  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
+    link.setAttribute("href", defaultUrl);
+    link.setAttribute("aria-label", label);
+  });
+}
+
+function addQuickWhatsAppAccess() {
+  document.querySelectorAll(".reference-top-info").forEach((topInfo) => {
+    if (topInfo.querySelector("[data-whatsapp-link]")) return;
+
+    const link = document.createElement("a");
+    link.setAttribute("data-whatsapp-link", "");
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noopener");
+    link.setAttribute("dir", "ltr");
+    link.textContent = contactPhoneDisplay;
+    topInfo.append(link);
+  });
+
+  if (!document.querySelector(".whatsapp-float")) {
+    const floatLink = document.createElement("a");
+    floatLink.className = "whatsapp-float";
+    floatLink.setAttribute("data-whatsapp-link", "");
+    floatLink.setAttribute("target", "_blank");
+    floatLink.setAttribute("rel", "noopener");
+    floatLink.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12.04 2.2A9.76 9.76 0 0 0 3.6 16.86L2.36 21.4l4.64-1.22a9.74 9.74 0 0 0 5.04 1.4h.01a9.69 9.69 0 0 0 9.72-9.69 9.73 9.73 0 0 0-9.73-9.69Zm.01 17.72h-.01a8.08 8.08 0 0 1-4.13-1.13l-.3-.18-2.75.72.73-2.68-.2-.31a8.07 8.07 0 1 1 6.66 3.58Zm4.43-6.04c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.37-1.94-1.19-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.47-.39-.4-.54-.41l-.46-.01c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.51.1.46-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/>
+      </svg>
+    `;
+    document.body.append(floatLink);
+  }
+
+  syncWhatsAppLinks();
+}
+
+function getFormStatus(form) {
+  let status = form.querySelector("[data-form-status]");
+
+  if (!status) {
+    status = document.createElement("p");
+    status.className = "form-status";
+    status.setAttribute("data-form-status", "");
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    form.append(status);
+  }
+
+  return status;
+}
+
+function setFormStatus(form, type, message, actionLink = null) {
+  const status = getFormStatus(form);
+  status.textContent = "";
+  status.append(document.createTextNode(message));
+
+  if (actionLink) {
+    const link = document.createElement("a");
+    link.href = actionLink.href;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = actionLink.text;
+    status.append(" ");
+    status.append(link);
+  }
+
+  status.dataset.status = type;
+}
+
+addQuickWhatsAppAccess();
+
+document.addEventListener("click", (event) => {
+  const target = event.target;
+
+  if (!(target instanceof Element)) return;
+
+  if (target.closest("[data-language-switch], .language-menu button")) {
+    setTimeout(syncWhatsAppLinks, 0);
+  }
+});
+
 document.querySelectorAll(".contact-form").forEach((form) => {
-  form.addEventListener("submit", (event) => {
+  form.setAttribute("action", `https://formsubmit.co/${contactEmail}`);
+  form.setAttribute("method", "POST");
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const language = document.documentElement.lang === "en" ? "en" : "ar";
     const button = form.querySelector("button[type='submit']");
     const originalText = button?.textContent;
-    const subject = encodeURIComponent(getFormTitle(form, language));
-    const message = buildContactMessage(form, language);
-    const mailtoUrl = `mailto:${contactEmail}?subject=${subject}&body=${encodeURIComponent(message)}`;
+    const formData = new FormData(form);
+    const replyTo = String(formData.get("email") || "").trim();
+    const contactSummary = buildContactMessage(form, language);
+    const whatsapp = openWhatsAppMessage(contactSummary);
 
-    if (button) {
-      button.textContent = language === "en" ? "Opening email..." : "جاري فتح البريد...";
+    formData.set("_subject", getFormTitle(form, language));
+    formData.set("_template", "table");
+    formData.set("_captcha", "false");
+    formData.set("summary", contactSummary);
+    formData.set("whatsapp_contact", contactPhoneDisplay);
+
+    if (replyTo) {
+      formData.set("_replyto", replyTo);
     }
 
-    window.location.href = mailtoUrl;
+    if (button) {
+      button.disabled = true;
+      button.textContent = language === "en" ? "Sending..." : "جاري الإرسال...";
+    }
 
-    setTimeout(() => {
+    setFormStatus(
+      form,
+      "pending",
+      whatsapp.opened
+        ? language === "en"
+          ? "WhatsApp opened with a ready message. Sending an email copy now..."
+          : "تم فتح الواتساب برسالة جاهزة. جاري إرسال نسخة على البريد..."
+        : language === "en"
+          ? "Sending an email copy now. If WhatsApp did not open, use this link:"
+          : "جاري إرسال نسخة على البريد. إذا لم يفتح الواتساب استخدم هذا الرابط:",
+      whatsapp.opened
+        ? null
+        : {
+            href: whatsapp.url,
+            text: language === "en" ? "Open WhatsApp" : "فتح واتساب"
+          }
+    );
+
+    try {
+      const response = await fetch(formSubmitEndpoint, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      form.reset();
+      setFormStatus(
+        form,
+        "success",
+        language === "en"
+          ? "WhatsApp opened with a ready message, and an email copy was sent. We will contact you soon."
+          : "تم فتح الواتساب برسالة جاهزة وإرسال نسخة على البريد. سنعاود التواصل معك قريبًا."
+      );
+    } catch (error) {
+      setFormStatus(
+        form,
+        "error",
+        language === "en"
+          ? "WhatsApp opened with a ready message, but we could not send the email copy. Please email us directly at nooha2040@gmail.com."
+          : "تم فتح الواتساب برسالة جاهزة، لكن تعذر إرسال نسخة البريد. فضلاً راسلنا مباشرة على البريد: nooha2040@gmail.com",
+        {
+          href: whatsapp.url,
+          text: language === "en" ? "Open WhatsApp again" : "فتح واتساب مرة أخرى"
+        }
+      );
+    } finally {
       if (button && originalText) {
+        button.disabled = false;
         button.textContent = originalText;
       }
-    }, 1800);
+    }
   });
 });
