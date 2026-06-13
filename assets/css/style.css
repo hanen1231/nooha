@@ -748,30 +748,34 @@ textarea {
   min-height: 56vh;
   color: var(--color-white);
   background:
-    linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("../../public/images/real/central-kitchen-hot-line-01.jpeg") center/cover no-repeat;
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://images.unsplash.com/photo-1586969593928-1c87c1f9c2ef?auto=format&fit=crop&w=2200&q=82") center/cover no-repeat;
 }
 
 .services-hero {
-  background-image:
-    linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80");
-  background-position: center, left center;
-  background-size: auto, 180% auto;
-  background-repeat: no-repeat;
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://unsplash.com/photos/rO6709B116E/download?force=true") center/cover no-repeat;
 }
 
 .projects-hero {
-  background-image:
-    linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://images.unsplash.com/photo-1677129663827-1fe357719b46?auto=format&fit=crop&w=2200&q=82") center/cover no-repeat;
 }
 
-.certificates-hero,
+.certificates-hero {
+  background-image:
+    linear-gradient(90deg, rgba(13, 46, 55, 0.78), rgba(13, 13, 13, 0.48)),
+    url("https://images.unsplash.com/photo-1769638913840-2ca96d90e8a9?auto=format&fit=crop&w=2200&q=82");
+  background-position: center, center;
+}
+
 .contact-hero {
   background-image:
-    linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("../../public/images/real/nooha-branded-delivery-truck-01.jpeg");
+    linear-gradient(90deg, rgba(13, 46, 55, 0.78), rgba(13, 13, 13, 0.48)),
+    url("https://images.unsplash.com/photo-1488992783499-418eb1f62d08?auto=format&fit=crop&w=2200&q=82");
+  background-position: center, center;
 }
 
 .profile-hero {
@@ -781,27 +785,27 @@ textarea {
 }
 
 .careers-hero {
-  background-image:
-    linear-gradient(90deg, var(--color-overlay), var(--color-overlay-soft)),
-    url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://unsplash.com/photos/0EkWTSFXwCc/download?force=true") center/cover no-repeat;
 }
 
 .madinah-kitchen-hero {
-  background-image:
-    linear-gradient(90deg, rgba(13, 46, 55, 0.74), rgba(13, 13, 13, 0.42)),
-    url("../../public/images/real/madinah-central-kitchen-hero-01.webp");
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://unsplash.com/photos/moN8l2jGBhc/download?force=true") center/cover no-repeat;
 }
 
 .makkah-branch-hero {
-  background-image:
-    linear-gradient(90deg, rgba(13, 46, 55, 0.74), rgba(13, 13, 13, 0.42)),
-    url("../../public/images/real/makkah-branch-hero-01.webp");
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://unsplash.com/photos/b0SHGJ9Oy8U/download?force=true") center/cover no-repeat;
 }
 
 .riyadh-import-export-hero {
-  background-image:
-    linear-gradient(90deg, rgba(13, 46, 55, 0.76), rgba(13, 13, 13, 0.46)),
-    url("../../public/images/real/riyadh-import-export-hero-01.webp");
+  background:
+    linear-gradient(90deg, rgba(3, 16, 21, 0.9), rgba(3, 16, 21, 0.68)),
+    url("https://unsplash.com/photos/VnMbc9Szs-E/download?force=true") center/cover no-repeat;
 }
 
 .riyadh-kitchen-hero {
@@ -1424,8 +1428,24 @@ a.contact-method:hover {
   color: var(--color-white);
   background:
     linear-gradient(180deg, rgba(126, 164, 83, 0.86), rgba(126, 164, 83, 0.82)),
-    url("../../public/images/real/delivery-preparation-01.jpeg") center/cover no-repeat;
+    var(--kitchen-feature-image, url("../../public/images/real/delivery-preparation-01.jpeg")) center/cover no-repeat;
   box-shadow: var(--shadow-sm);
+}
+
+.kitchen-feature:nth-child(1) {
+  --kitchen-feature-image: url("../../public/images/real/central-kitchens-menu-preview-01.webp");
+}
+
+.kitchen-feature:nth-child(2) {
+  --kitchen-feature-image: url("../../public/images/real/cold-storage-room-01.jpeg");
+}
+
+.kitchen-feature:nth-child(3) {
+  --kitchen-feature-image: url("../../public/images/real/delivery-preparation-01.jpeg");
+}
+
+.kitchen-feature:nth-child(4) {
+  --kitchen-feature-image: url("../../public/images/real/central-kitchen-hot-line-01.jpeg");
 }
 
 .kitchen-feature span {
@@ -2197,7 +2217,9 @@ a.contact-method:hover {
 .home-sectors-section {
   padding: 78px 0 82px;
   color: var(--color-white);
-  background: #a9c77e;
+  background:
+    linear-gradient(90deg, rgba(82, 112, 60, 0.86), rgba(137, 170, 97, 0.74)),
+    url("../../public/images/0/WhatsApp%20Image%202026-06-13%20at%201.51.08%20PM.jpeg") center/cover no-repeat;
 }
 
 .home-sectors-section .section-heading h2,
@@ -3323,13 +3345,7 @@ body:not(.home-page) .page-hero p {
 
 .hero-message h1::after {
   content: "";
-  position: absolute;
-  right: -8px;
-  left: -8px;
-  bottom: 8px;
-  z-index: -1;
-  height: 8px;
-  background: rgba(217, 161, 59, 0.72);
+  display: none;
 }
 
 .hero-message h1 span {
@@ -3346,6 +3362,16 @@ body:not(.home-page) .page-hero p {
   z-index: -1;
   height: 8px;
   background: rgba(217, 161, 59, 0.72);
+}
+
+.hero-message h1 small {
+  display: block;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(0.92rem, 1.35vw, 1.18rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 .hero-quote {
