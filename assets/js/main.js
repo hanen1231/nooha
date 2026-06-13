@@ -143,7 +143,7 @@ const translations = {
     "نموذج مبدئي جاهز للربط لاحقًا بالبريد أو CRM أو لوحة تحكم.": "A starter form that can later be connected to email, CRM, or an admin dashboard.",
     "طلب خدمة": "Service request",
     "بيانات المشروع": "Project details",
-    "أرسل الاحتياج الأساسي وسنرد عليك عبر الجوال أو البريد.": "Send the basic requirement and we will respond by mobile or email.",
+    "أرسل الاحتياج الأساسي وسنرد عليك عبر البريد.": "Send the basic requirement and we will respond by email.",
     "الاسم الكامل": "Full name",
     "رقم الجوال": "Mobile number",
     "البريد الإلكتروني": "Email address",
@@ -151,11 +151,7 @@ const translations = {
     "تفاصيل الطلب": "Request details",
     "إرسال الطلب": "Send request",
     "معلومات التواصل": "Contact information",
-    "تواصل معنا عبر الجوال أو البريد الإلكتروني أو حسابات التواصل الرسمية.": "Contact us through mobile, email, or official social channels.",
-    "الجوال الأول": "Primary mobile",
-    "الجوال الثاني": "Secondary mobile",
-    "الجوال 1: +966 57 000 0171": "Mobile 1: +966 57 000 0171",
-    "الجوال 2: +966 55 532 3584": "Mobile 2: +966 55 532 3584",
+    "تواصل معنا عبر البريد الإلكتروني أو حسابات التواصل الرسمية.": "Contact us through email or official social channels.",
     "البريد: nooha2040@gmail.com": "Email: nooha2040@gmail.com",
     "إنستقرام": "Instagram",
     "سناب شات": "Snapchat",
@@ -225,7 +221,6 @@ const supplementalTranslations = {
     "نوهة للإعاشة | المطبخ المركزي في تبوك ضباء": "Nooha Catering | Tabuk Duba Central Kitchen",
     "نوهة للإعاشة | فرع مكة": "Nooha Catering | Makkah Branch",
     "نوهة للإعاشة | فرع الاستيراد والتصدير في الرياض": "Nooha Catering | Riyadh Import and Export Branch",
-    "اتصل بنا": "Contact us",
     "عن نوها": "About Nooha",
     "عن نوهة": "About Nooha",
     "نوها في سطور": "Nooha at a Glance",
@@ -272,7 +267,7 @@ const supplementalTranslations = {
     "نعمل مع شركات رائدة ومشاريع كبرى في قطاعات الصناعة والبناء والضيافة والرعاية الصحية ومبادرات الرؤية، لنكون جزءًا لا يتجزأ من دورة تشغيلية تضمن استمرار القوى العاملة في تقديم أفضل أداء ممكن.": "We work with leading companies and major projects in industry, construction, hospitality, healthcare, and Vision initiatives, becoming part of an operating cycle that helps workforces continue performing at their best.",
     "خبرة في مجال القوى العاملة": "Workforce Sector Experience",
     "يتمتع فريق نوهة بخبرة تشغيلية واسعة في إدارة خدمات التموين والإعاشة في بيئات عمل متنوعة، مع سجل حافل بالحفاظ على الجودة والانضباط التشغيلي.": "Nooha's team has broad operating experience managing catering and support services in diverse work environments, with a strong record of quality and operational discipline.",
-    "حاصلون على اعتماد مدن - الدرجة الأولى": "Certified by MODON - First Class, with the largest kitchen in Madinah",
+    "حاصلون على اعتماد مدن - الدرجة الأولى": "Certified by MODON - First Class",
     "ندير منظومة تموين وإعاشة متكاملة، تبدأ من إعداد المقادير وتنتهي بإدارة الميدان.": "We manage an integrated catering system, from ingredient preparation through field operations.",
     "اعرف أكثر": "Learn More",
     "تعرف أكثر": "Learn More",
@@ -884,7 +879,7 @@ filterGroup?.addEventListener("click", (event) => {
   });
 });
 
-const whatsappNumber = "966570000171";
+const contactEmail = "nooha2040@gmail.com";
 
 const formFieldLabels = {
   ar: {
@@ -924,7 +919,7 @@ function getFormTitle(form, language) {
   return "طلب تواصل جديد";
 }
 
-function buildWhatsAppMessage(form, language) {
+function buildContactMessage(form, language) {
   const labels = formFieldLabels[language];
   const formData = new FormData(form);
   const lines = [getFormTitle(form, language), ""];
@@ -946,14 +941,15 @@ document.querySelectorAll(".contact-form").forEach((form) => {
     const language = document.documentElement.lang === "en" ? "en" : "ar";
     const button = form.querySelector("button[type='submit']");
     const originalText = button?.textContent;
-    const message = buildWhatsAppMessage(form, language);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const subject = encodeURIComponent(getFormTitle(form, language));
+    const message = buildContactMessage(form, language);
+    const mailtoUrl = `mailto:${contactEmail}?subject=${subject}&body=${encodeURIComponent(message)}`;
 
     if (button) {
-      button.textContent = language === "en" ? "Opening WhatsApp..." : "جاري فتح واتساب...";
+      button.textContent = language === "en" ? "Opening email..." : "جاري فتح البريد...";
     }
 
-    window.location.href = whatsappUrl;
+    window.location.href = mailtoUrl;
 
     setTimeout(() => {
       if (button && originalText) {
