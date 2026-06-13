@@ -272,7 +272,7 @@ const supplementalTranslations = {
     "نعمل مع شركات رائدة ومشاريع كبرى في قطاعات الصناعة والبناء والضيافة والرعاية الصحية ومبادرات الرؤية، لنكون جزءًا لا يتجزأ من دورة تشغيلية تضمن استمرار القوى العاملة في تقديم أفضل أداء ممكن.": "We work with leading companies and major projects in industry, construction, hospitality, healthcare, and Vision initiatives, becoming part of an operating cycle that helps workforces continue performing at their best.",
     "خبرة في مجال القوى العاملة": "Workforce Sector Experience",
     "يتمتع فريق نوهة بخبرة تشغيلية واسعة في إدارة خدمات التموين والإعاشة في بيئات عمل متنوعة، مع سجل حافل بالحفاظ على الجودة والانضباط التشغيلي.": "Nooha's team has broad operating experience managing catering and support services in diverse work environments, with a strong record of quality and operational discipline.",
-    "حاصلون على اعتماد مدن - الدرجة الأولى، ولدينا أكبر مطبخ في المدينة المنورة": "Certified by MODON - First Class, with the largest kitchen in Madinah",
+    "حاصلون على اعتماد مدن - الدرجة الأولى": "Certified by MODON - First Class, with the largest kitchen in Madinah",
     "ندير منظومة تموين وإعاشة متكاملة، تبدأ من إعداد المقادير وتنتهي بإدارة الميدان.": "We manage an integrated catering system, from ingredient preparation through field operations.",
     "اعرف أكثر": "Learn More",
     "تعرف أكثر": "Learn More",
