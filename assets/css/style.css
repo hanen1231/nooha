@@ -3339,6 +3339,51 @@ body:not(.home-page) .page-hero p {
     url("../../public/images/real/delivery-preparation-01.jpeg") center/cover no-repeat;
 }
 
+.home-flags-feature {
+  position: relative;
+  padding: clamp(54px, 7vw, 84px) 0 clamp(48px, 7vw, 88px);
+  background:
+    linear-gradient(180deg, var(--color-bg) 0%, rgba(18, 69, 89, 0.1) 48%, var(--color-bg) 100%);
+}
+
+.home-flags-feature .container {
+  width: min(calc(100% - 28px), 1280px);
+}
+
+.home-flags-frame {
+  position: relative;
+  margin: 0;
+  padding: clamp(7px, 1vw, 14px);
+  border: 1px solid rgba(242, 217, 187, 0.34);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 34px 88px rgba(0, 0, 0, 0.28);
+}
+
+.home-flags-frame::after {
+  content: "";
+  position: absolute;
+  inset-inline: clamp(28px, 8vw, 150px);
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand-gold), transparent);
+}
+
+.home-flags-crop {
+  overflow: hidden;
+  border-radius: 6px;
+  aspect-ratio: 1280 / 850;
+  background: #07171d;
+}
+
+.home-flags-frame img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
 .home-video-hero::after {
   display: none;
 }
@@ -3831,6 +3876,19 @@ body:not(.home-page) .page-hero p {
 
   .hero-message h1 {
     font-size: clamp(2rem, 10vw, 2.9rem);
+  }
+
+  .home-flags-feature {
+    padding: 42px 0 46px;
+  }
+
+  .home-flags-feature .container {
+    width: min(calc(100% - 18px), 1280px);
+  }
+
+  .home-flags-frame {
+    padding: 6px;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.24);
   }
 
   body:not(.home-page) .page-hero {
