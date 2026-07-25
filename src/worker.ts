@@ -12,7 +12,7 @@ import {
 } from "./auth/database";
 import {
   HttpError,
-  assertSameOriginPost,
+  assertSameOriginMutation,
   errorResponse,
   getClientIp,
   getStringField,
@@ -22,6 +22,14 @@ import {
   redirectResponse,
   withAdminSecurityHeaders
 } from "./auth/http";
+import {
+  getCmsPageBySlug,
+  listCmsSectionsByPageId,
+  reorderCmsSections,
+  updateCmsSectionVisibility,
+  type CmsPageRow,
+  type CmsSectionRow
+} from "./cms/database";
 import {
   clearSessionCookie,
   createAdminSession,
@@ -40,6 +48,7 @@ export interface Env {
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_ATTEMPT_RETENTION_MS = 24 * 60 * 60 * 1000;
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
+const HOME_PAGE_SLUG = "home";
 
 const PUBLIC_ADMIN_ASSETS = new Set([
   "/admin/admin.css",
@@ -61,6 +70,49 @@ function asObject(body: unknown): Record<string, unknown> {
   }
 
   return body as Record<string, unknown>;
+}
+
+function getBooleanField(body: Record<string, unknown>, field: string): boolean | null {
+  const value = body[field];
+  return typeof value === "boolean" ? value : null;
+}
+
+function getStringArrayField(body: Record<string, unknown>, field: string): string[] | null {
+  const value = body[field];
+
+  if (!Array.isArray(value) || !value.every((item) => typeof item === "string")) {
+    return null;
+  }
+
+  return value.map((item) => item.trim());
+}
+
+function serializeCmsPage(page: CmsPageRow) {
+  return {
+    id: page.id,
+    slug: page.slug,
+    fileName: page.file_name,
+    displayName: page.display_name,
+    status: page.status,
+    seoTitle: page.seo_title,
+    seoDescription: page.seo_description,
+    createdAt: page.created_at,
+    updatedAt: page.updated_at
+  };
+}
+
+function serializeCmsSection(section: CmsSectionRow) {
+  return {
+    id: section.id,
+    pageId: section.page_id,
+    sectionKey: section.section_key,
+    sectionType: section.section_type,
+    displayName: section.display_name,
+    sortOrder: section.sort_order,
+    isVisible: section.is_visible === 1,
+    updatedAt: section.updated_at,
+    publishedAt: section.published_at
+  };
 }
 
 function isAdminPath(pathname: string): boolean {
@@ -304,14 +356,127 @@ async function handleLogout(request: Request, env: Env): Promise<Response> {
   );
 }
 
+async function getHomeCmsPage(env: Env): Promise<{ page: CmsPageRow; sections: CmsSectionRow[] }> {
+  const page = await getCmsPageBySlug(env.DB, HOME_PAGE_SLUG);
+
+  if (!page) {
+    throw new HttpError(404, "cms_page_not_found", "CMS page was not found.");
+  }
+
+  const sections = await listCmsSectionsByPageId(env.DB, page.id);
+  return { page, sections };
+}
+
+async function handleGetHomeCmsPage(env: Env): Promise<Response> {
+  const { page, sections } = await getHomeCmsPage(env);
+
+  return jsonResponse({
+    ok: true,
+    page: serializeCmsPage(page),
+    sections: sections.map(serializeCmsSection)
+  });
+}
+
+async function handleCmsSectionVisibility(request: Request, env: Env, sectionId: string): Promise<Response> {
+  const body = asObject(await readJsonBody(request));
+  const isVisible = getBooleanField(body, "isVisible");
+
+  if (isVisible === null) {
+    throw new HttpError(400, "invalid_visibility", "isVisible must be a boolean.");
+  }
+
+  const { sections } = await getHomeCmsPage(env);
+  const section = sections.find((item) => item.id === sectionId);
+
+  if (!section) {
+    throw new HttpError(404, "cms_section_not_found", "CMS section was not found.");
+  }
+
+  const updatedAt = new Date().toISOString();
+  const updated = await updateCmsSectionVisibility(env.DB, {
+    sectionId,
+    isVisible,
+    updatedAt
+  });
+
+  if (!updated) {
+    throw new HttpError(409, "cms_section_not_updated", "CMS section could not be updated.");
+  }
+
+  return jsonResponse({
+    ok: true,
+    section: {
+      ...serializeCmsSection(section),
+      isVisible,
+      updatedAt
+    }
+  });
+}
+
+async function handleCmsSectionOrder(request: Request, env: Env): Promise<Response> {
+  const body = asObject(await readJsonBody(request));
+  const sectionIds = getStringArrayField(body, "sectionIds");
+
+  if (!sectionIds || sectionIds.length === 0 || sectionIds.some((id) => id.length === 0)) {
+    throw new HttpError(400, "invalid_section_order", "sectionIds must be a non-empty string array.");
+  }
+
+  if (new Set(sectionIds).size !== sectionIds.length) {
+    throw new HttpError(400, "invalid_section_order", "sectionIds must not contain duplicates.");
+  }
+
+  const { page, sections } = await getHomeCmsPage(env);
+  const currentIds = sections.map((section) => section.id);
+  const expectedIds = new Set(currentIds);
+  const containsEverySection =
+    sectionIds.length === currentIds.length && sectionIds.every((sectionId) => expectedIds.has(sectionId));
+
+  if (!containsEverySection) {
+    throw new HttpError(400, "invalid_section_order", "sectionIds must contain every home page section exactly once.");
+  }
+
+  const updatedAt = new Date().toISOString();
+  await reorderCmsSections(env.DB, {
+    pageId: page.id,
+    sectionIds,
+    updatedAt
+  });
+
+  const reorderedSections = await listCmsSectionsByPageId(env.DB, page.id);
+
+  return jsonResponse({
+    ok: true,
+    sections: reorderedSections.map(serializeCmsSection)
+  });
+}
+
+async function handleCmsApi(request: Request, env: Env, pathname: string): Promise<Response> {
+  await requireSession(env, request);
+
+  if (pathname === "/api/admin/cms/pages/home") {
+    return request.method === "GET" ? handleGetHomeCmsPage(env) : methodNotAllowed();
+  }
+
+  if (pathname === "/api/admin/cms/pages/home/sections/order") {
+    return request.method === "PUT" ? handleCmsSectionOrder(request, env) : methodNotAllowed();
+  }
+
+  const visibilityMatch = pathname.match(/^\/api\/admin\/cms\/sections\/([A-Za-z0-9_-]{1,100})\/visibility$/);
+
+  if (visibilityMatch) {
+    const sectionId = visibilityMatch[1] ?? "";
+    return request.method === "PATCH" ? handleCmsSectionVisibility(request, env, sectionId) : methodNotAllowed();
+  }
+
+  return errorResponse(404, "not_found", "Not found.");
+}
+
 async function handleAdminApi(request: Request, env: Env, pathname: string): Promise<Response> {
   if (pathname === "/api/admin/setup-status") {
     return request.method === "GET" ? handleSetupStatus(env) : methodNotAllowed();
   }
 
-  if (request.method === "POST") {
-    assertSameOriginPost(request);
-  }
+  assertSameOriginMutation(request);
 
   if (pathname === "/api/admin/setup") {
     return request.method === "POST" ? handleSetup(request, env) : methodNotAllowed();
@@ -327,6 +492,10 @@ async function handleAdminApi(request: Request, env: Env, pathname: string): Pro
 
   if (pathname === "/api/admin/logout") {
     return request.method === "POST" ? handleLogout(request, env) : methodNotAllowed();
+  }
+
+  if (pathname.startsWith("/api/admin/cms/")) {
+    return handleCmsApi(request, env, pathname);
   }
 
   await requireSession(env, request);

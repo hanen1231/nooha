@@ -13,14 +13,22 @@
       <header class="dashboard-header">
         <div>
           <p class="brand">نوها</p>
-          <h1 id="dashboard-title">لوحة تحكم نوها</h1>
+          <h1 id="dashboard-title">لوحة تحكم الموقع</h1>
+          <p class="dashboard-subtitle">إدارة ترتيب سكاشن الصفحة الرئيسية وحالة ظهورها.</p>
         </div>
-        <button id="logout-button" class="secondary-button" type="button">تسجيل خروج</button>
+
+        <div class="dashboard-header-actions">
+          <a class="button-link secondary-button" href="/" target="_blank" rel="noopener">عرض الموقع</a>
+          <button id="logout-button" class="secondary-button" type="button">تسجيل خروج</button>
+        </div>
       </header>
 
-      <section class="dashboard-grid">
-        <article class="info-card">
-          <h2>الحساب</h2>
+      <section class="dashboard-summary" aria-label="ملخص لوحة التحكم">
+        <article class="info-card account-card">
+          <div class="card-heading-row">
+            <h2>الحساب</h2>
+            <span class="status-badge">مالك</span>
+          </div>
           <dl>
             <div>
               <dt>البريد</dt>
@@ -33,13 +41,39 @@
           </dl>
         </article>
 
-        <article class="info-card">
-          <h2>المرحلة الحالية</h2>
-          <p>إدارة الصفحات والمحتوى ستضاف في المرحلة القادمة.</p>
+        <article class="info-card page-summary-card">
+          <div class="card-heading-row">
+            <h2 id="cms-page-name">الصفحة الرئيسية</h2>
+            <span id="cms-page-status" class="status-badge status-badge-muted">جاري التحميل</span>
+          </div>
+          <p id="cms-page-description">سيتم عرض سكاشن الصفحة هنا بعد تحميل البيانات من Cloudflare D1.</p>
+          <div class="page-summary-meta">
+            <span><strong id="cms-visible-count">0</strong> ظاهر</span>
+            <span><strong id="cms-hidden-count">0</strong> مخفي</span>
+            <span><strong id="cms-sections-count">0</strong> سكشن</span>
+          </div>
         </article>
       </section>
 
-      <p id="dashboard-message" class="form-message" role="status" aria-live="polite"></p>
+      <section class="cms-panel" aria-labelledby="cms-sections-title">
+        <div class="cms-panel-header">
+          <div>
+            <p class="eyebrow">محتوى الموقع</p>
+            <h2 id="cms-sections-title">سكاشن الصفحة الرئيسية</h2>
+            <p>استخدم الأسهم لتغيير الترتيب، ومفتاح الظهور لإخفاء أي سكشن أو إعادته.</p>
+          </div>
+
+          <div class="cms-panel-actions">
+            <button id="reload-sections-button" class="secondary-button" type="button">تحديث القائمة</button>
+            <button id="save-order-button" type="button" disabled>حفظ الترتيب</button>
+          </div>
+        </div>
+
+        <div id="sections-loading" class="cms-loading" role="status">جاري تحميل السكاشن…</div>
+        <div id="sections-list" class="sections-list" aria-live="polite" aria-busy="true"></div>
+      </section>
+
+      <p id="dashboard-message" class="form-message dashboard-message" role="status" aria-live="polite"></p>
     </main>
   </body>
 </html>

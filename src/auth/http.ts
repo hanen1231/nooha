@@ -79,8 +79,8 @@ export function withAdminSecurityHeaders(response: Response): Response {
   });
 }
 
-export function assertSameOriginPost(request: Request): void {
-  if (request.method !== "POST") {
+export function assertSameOriginMutation(request: Request): void {
+  if (!new Set(["POST", "PUT", "PATCH", "DELETE"]).has(request.method)) {
     return;
   }
 
@@ -90,6 +90,10 @@ export function assertSameOriginPost(request: Request): void {
   if (origin !== requestUrl.origin) {
     throw new HttpError(403, "forbidden", "Request origin is not allowed.");
   }
+}
+
+export function assertSameOriginPost(request: Request): void {
+  assertSameOriginMutation(request);
 }
 
 export async function readJsonBody<T = Record<string, unknown>>(request: Request): Promise<T> {
