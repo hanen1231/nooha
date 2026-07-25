@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>لوحة تحكم نوها</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <script type="module" src="/admin/dashboard.js" defer></script>
+  </head>
+  <body class="admin-dashboard-page">
+    <main class="dashboard-shell" aria-labelledby="dashboard-title">
+      <header class="dashboard-header">
+        <div>
+          <p class="brand">نوها</p>
+          <h1 id="dashboard-title">لوحة تحكم نوها</h1>
+        </div>
+        <button id="logout-button" class="secondary-button" type="button">تسجيل خروج</button>
+      </header>
+
+      <section class="dashboard-grid">
+        <article class="info-card">
+          <h2>الحساب</h2>
+          <dl>
+            <div>
+              <dt>البريد</dt>
+              <dd id="admin-email">-</dd>
+            </div>
+            <div>
+              <dt>الدور</dt>
+              <dd id="admin-role">-</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="info-card">
+          <h2>المرحلة الحالية</h2>
+          <p>إدارة الصفحات والمحتوى ستضاف في المرحلة القادمة.</p>
+        </article>
+      </section>
+
+      <p id="dashboard-message" class="form-message" role="status" aria-live="polite"></p>
+    </main>
+  </body>
+</html>

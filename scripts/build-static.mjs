@@ -5,6 +5,7 @@ const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, "dist");
 const assetsDir = path.resolve(rootDir, "assets");
 const publicDir = path.resolve(rootDir, "public");
+const adminDir = path.resolve(rootDir, "admin");
 
 function assertInsideRoot(targetPath) {
   const relative = path.relative(rootDir, targetPath);
@@ -103,7 +104,9 @@ const copiedAssets = await copyDirectoryIfPresent(assetsDir, path.join(distDir, 
 const copiedPublic = await copyDirectoryIfPresent(publicDir, path.join(distDir, "public"), {
   filter: shouldCopyPublicPath
 });
+const copiedAdmin = await copyDirectoryIfPresent(adminDir, path.join(distDir, "admin"));
 
 console.log(`Copied ${htmlFiles.length} HTML files to dist.`);
 console.log(copiedAssets ? "Copied assets/ to dist/assets." : "No assets/ directory found.");
 console.log(copiedPublic ? "Copied public/ to dist/public with temporary profiles excluded." : "No public/ directory found.");
+console.log(copiedAdmin ? "Copied admin/ to dist/admin." : "No admin/ directory found.");
