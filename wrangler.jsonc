@@ -7,5 +7,12 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "run_worker_first": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nooha-cms-db",
+      "database_id": "431efb93-5a5f-48fa-be7c-ecc49677ba00"
+    }
+  ]
 }
