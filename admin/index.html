@@ -1,79 +1,202 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
-    <title>لوحة تحكم نوها</title>
-    <link rel="stylesheet" href="/admin/admin.css">
-    <script type="module" src="/admin/dashboard.js" defer></script>
-  </head>
-  <body class="admin-dashboard-page">
-    <main class="dashboard-shell" aria-labelledby="dashboard-title">
-      <header class="dashboard-header">
-        <div>
-          <p class="brand">نوها</p>
-          <h1 id="dashboard-title">لوحة تحكم الموقع</h1>
-          <p class="dashboard-subtitle">إدارة ترتيب سكاشن الصفحة الرئيسية وحالة ظهورها.</p>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة إدارة نوهة</title>
+  <link rel="icon" href="/public/favicon.ico" sizes="any">
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body class="admin-app">
+  <div class="admin-layout">
+    <aside class="admin-sidebar" aria-label="التنقل الرئيسي">
+      <div class="brand-panel">
+        <div class="brand-mark">ن</div>
+        <div><strong>نوهة</strong><span>إدارة الموقع</span></div>
+      </div>
 
-        <div class="dashboard-header-actions">
-          <a class="button-link secondary-button" href="/" target="_blank" rel="noopener">عرض الموقع</a>
-          <button id="logout-button" class="secondary-button" type="button">تسجيل خروج</button>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" type="button" data-view="overview"><span>▦</span> نظرة عامة</button>
+        <button class="nav-item" type="button" data-view="pages"><span>▤</span> الصفحات والمحتوى</button>
+        <button class="nav-item" type="button" data-view="media"><span>▧</span> مكتبة الصور</button>
+        <button class="nav-item" type="button" data-view="settings"><span>⚙</span> إعدادات الموقع</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="account-chip"><span class="account-avatar">م</span><div><strong id="admin-email">...</strong><span id="admin-role">...</span></div></div>
+        <button id="logout-button" class="ghost-danger" type="button">تسجيل الخروج</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div>
+          <p class="topbar-kicker">نظام إدارة المحتوى</p>
+          <h1 id="view-title">لوحة التحكم</h1>
+        </div>
+        <div class="topbar-actions">
+          <a id="open-site-link" class="button button-muted" href="/index.html" target="_blank" rel="noopener">فتح الموقع ↗</a>
+          <button id="new-page-button" class="button button-primary" type="button">+ صفحة جديدة</button>
         </div>
       </header>
 
-      <section class="dashboard-summary" aria-label="ملخص لوحة التحكم">
-        <article class="info-card account-card">
-          <div class="card-heading-row">
-            <h2>الحساب</h2>
-            <span class="status-badge">مالك</span>
-          </div>
-          <dl>
-            <div>
-              <dt>البريد</dt>
-              <dd id="admin-email">-</dd>
-            </div>
-            <div>
-              <dt>الدور</dt>
-              <dd id="admin-role">-</dd>
-            </div>
-          </dl>
-        </article>
+      <div id="global-message" class="global-message" role="status" aria-live="polite"></div>
 
-        <article class="info-card page-summary-card">
-          <div class="card-heading-row">
-            <h2 id="cms-page-name">الصفحة الرئيسية</h2>
-            <span id="cms-page-status" class="status-badge status-badge-muted">جاري التحميل</span>
-          </div>
-          <p id="cms-page-description">سيتم عرض سكاشن الصفحة هنا بعد تحميل البيانات من Cloudflare D1.</p>
-          <div class="page-summary-meta">
-            <span><strong id="cms-visible-count">0</strong> ظاهر</span>
-            <span><strong id="cms-hidden-count">0</strong> مخفي</span>
-            <span><strong id="cms-sections-count">0</strong> سكشن</span>
-          </div>
-        </article>
-      </section>
-
-      <section class="cms-panel" aria-labelledby="cms-sections-title">
-        <div class="cms-panel-header">
-          <div>
-            <p class="eyebrow">محتوى الموقع</p>
-            <h2 id="cms-sections-title">سكاشن الصفحة الرئيسية</h2>
-            <p>استخدم الأسهم لتغيير الترتيب، ومفتاح الظهور لإخفاء أي سكشن أو إعادته.</p>
-          </div>
-
-          <div class="cms-panel-actions">
-            <button id="reload-sections-button" class="secondary-button" type="button">تحديث القائمة</button>
-            <button id="save-order-button" type="button" disabled>حفظ الترتيب</button>
-          </div>
+      <section id="overview-view" class="view-panel active" data-panel="overview">
+        <div class="welcome-card">
+          <div><span class="eyebrow-label">مرحبًا بك</span><h2>إدارة موقع نوهة من مكان واحد</h2><p>عدّل الصفحات، النصوص، الصور، ترتيب الأقسام وحالة النشر دون فتح ملفات البرمجة.</p></div>
+          <button class="button button-light" type="button" data-go-pages>ابدأ إدارة المحتوى</button>
         </div>
 
-        <div id="sections-loading" class="cms-loading" role="status">جاري تحميل السكاشن…</div>
-        <div id="sections-list" class="sections-list" aria-live="polite" aria-busy="true"></div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>إجمالي الصفحات</span><strong id="stat-pages">0</strong><small>صفحات الموقع المسجلة</small></article>
+          <article class="stat-card"><span>الأقسام</span><strong id="stat-sections">0</strong><small>سكاشن قابلة للإدارة</small></article>
+          <article class="stat-card"><span>تعديلات غير منشورة</span><strong id="stat-pending">0</strong><small>تحتاج إلى نشر</small></article>
+          <article class="stat-card"><span>الأقسام الظاهرة</span><strong id="stat-visible">0</strong><small>تظهر للزوار</small></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel-card">
+            <div class="panel-heading"><div><span class="eyebrow-label">الصفحات</span><h2>إدارة سريعة</h2></div><button class="text-button" type="button" data-go-pages>عرض الكل</button></div>
+            <div id="overview-pages" class="overview-page-list"></div>
+          </section>
+          <section class="panel-card activity-card">
+            <div class="panel-heading"><div><span class="eyebrow-label">حالة النظام</span><h2>جاهزية الموقع</h2></div></div>
+            <ul class="status-list">
+              <li><span class="status-dot success"></span><div><strong>Cloudflare Worker</strong><small>واجهة الموقع وAPI</small></div></li>
+              <li><span class="status-dot success"></span><div><strong>D1 Database</strong><small>المحتوى والصفحات</small></div></li>
+              <li><span class="status-dot warning"></span><div><strong>رفع ملفات جديدة</strong><small>يُفعّل عند ربط R2</small></div></li>
+            </ul>
+          </section>
+        </div>
       </section>
 
-      <p id="dashboard-message" class="form-message dashboard-message" role="status" aria-live="polite"></p>
+      <section id="pages-view" class="view-panel" data-panel="pages">
+        <div class="content-workspace">
+          <aside class="pages-rail">
+            <div class="rail-heading"><div><span class="eyebrow-label">الموقع</span><h2>الصفحات</h2></div><button id="rail-new-page" class="square-button" type="button" aria-label="إضافة صفحة">+</button></div>
+            <label class="search-field"><span>⌕</span><input id="page-search" type="search" placeholder="ابحث عن صفحة"></label>
+            <div id="pages-list" class="pages-list" aria-live="polite"></div>
+          </aside>
+
+          <div class="page-editor">
+            <div id="page-empty" class="empty-editor"><div class="empty-icon">▤</div><h2>اختر صفحة</h2><p>اختر صفحة من القائمة لعرض أقسامها وتعديل محتواها.</p></div>
+
+            <div id="page-editor-content" hidden>
+              <div class="page-editor-header">
+                <div><div class="title-row"><h2 id="current-page-name">...</h2><span id="current-page-status" class="status-badge">...</span></div><p id="current-page-description">...</p></div>
+                <div class="editor-actions">
+                  <button id="page-settings-button" class="button button-muted" type="button">إعدادات الصفحة</button>
+                  <a id="preview-page-link" class="button button-muted" target="_blank" rel="noopener">معاينة ↗</a>
+                  <button id="discard-draft-button" class="button button-muted" type="button" hidden>إلغاء التغييرات</button>
+                  <button id="publish-page-button" class="button button-primary" type="button">نشر التغييرات</button>
+                </div>
+              </div>
+
+              <div id="unpublished-alert" class="unpublished-alert" hidden>
+                <strong>تغييرات غير منشورة</strong>
+                <span>احفظ المسودة ثم اضغط نشر حتى تظهر التعديلات على الموقع العام.</span>
+              </div>
+
+              <div class="page-summary-grid">
+                <div><span>عدد الأقسام</span><strong id="page-sections-count">0</strong></div>
+                <div><span>الظاهرة</span><strong id="page-visible-count">0</strong></div>
+                <div><span>غير المنشورة</span><strong id="page-pending-count">0</strong></div>
+              </div>
+
+              <div class="sections-toolbar">
+                <div><h3>أقسام الصفحة</h3><p>رتّب الأقسام، أخفِها أو افتح محرر المحتوى.</p></div>
+                <div><button id="save-order-button" class="button button-muted" type="button" disabled>حفظ الترتيب</button><button id="add-section-button" class="button button-secondary" type="button">+ إضافة سكشن</button></div>
+              </div>
+
+              <div id="sections-loading" class="loading-block">جاري تحميل الأقسام...</div>
+              <div id="sections-list" class="sections-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="media-view" class="view-panel" data-panel="media">
+        <div class="panel-card wide-card">
+          <div class="panel-heading"><div><span class="eyebrow-label">الوسائط</span><h2>مكتبة الصور الحالية</h2><p>اختر أي صورة أثناء تعديل السكشن. رفع ملفات جديدة سيعمل بعد ربط Cloudflare R2.</p></div></div>
+          <label class="search-field media-search"><span>⌕</span><input id="media-search" type="search" placeholder="ابحث باسم الصورة"></label>
+          <div id="media-grid" class="media-grid"></div>
+        </div>
+      </section>
+
+      <section id="settings-view" class="view-panel" data-panel="settings">
+        <div class="panel-card wide-card settings-placeholder">
+          <div class="empty-icon">⚙</div><h2>إعدادات الموقع العامة</h2><p>الهوية، الهيدر، الفوتر وبيانات التواصل ستكون في هذه الصفحة. قاعدة البيانات مهيأة لها بالفعل.</p>
+        </div>
+      </section>
     </main>
-  </body>
+  </div>
+
+  <dialog id="section-dialog" class="admin-dialog section-dialog">
+    <form id="section-form" method="dialog">
+      <div class="dialog-header"><div><span class="eyebrow-label">محرر المحتوى</span><h2 id="section-dialog-title">تعديل السكشن</h2></div><button class="dialog-close" type="button" data-close-dialog="section-dialog">×</button></div>
+      <div class="dialog-body">
+        <div class="form-grid two-columns">
+          <label>اسم السكشن<input id="section-display-name" name="displayName" maxlength="180" required></label>
+          <label>نوع السكشن<select id="section-type" name="sectionType"></select></label>
+        </div>
+        <label>العنوان الصغير<input id="section-eyebrow" name="eyebrow" maxlength="160"></label>
+        <label>العنوان الرئيسي<input id="section-title" name="title" maxlength="300"></label>
+        <label>النص<textarea id="section-body" name="body" rows="6" maxlength="8000"></textarea></label>
+        <div class="form-grid two-columns">
+          <label>مسار أو رابط الصورة<div class="input-action"><input id="section-image-url" name="imageUrl" maxlength="1000"><button id="choose-image-button" type="button">اختيار</button></div></label>
+          <label>وصف الصورة<input id="section-image-alt" name="imageAlt" maxlength="300"></label>
+          <label>نص الزر<input id="section-button-label" name="buttonLabel" maxlength="160"></label>
+          <label>رابط الزر<input id="section-button-url" name="buttonUrl" maxlength="1000"></label>
+        </div>
+
+        <div class="items-editor-header"><div><h3>البطاقات والعناصر</h3><p>استخدمها في الخدمات، الإحصائيات، الشعارات ومعارض الصور.</p></div><button id="add-item-button" class="button button-muted" type="button">+ عنصر</button></div>
+        <div id="items-editor" class="items-editor"></div>
+      </div>
+      <div class="dialog-footer"><button class="button button-muted" type="button" data-close-dialog="section-dialog">إلغاء</button><button id="save-section-button" class="button button-primary" type="submit">حفظ المسودة</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="page-dialog" class="admin-dialog compact-dialog">
+    <form id="page-form" method="dialog">
+      <div class="dialog-header"><div><span class="eyebrow-label">صفحة جديدة</span><h2>إضافة صفحة للموقع</h2></div><button class="dialog-close" type="button" data-close-dialog="page-dialog">×</button></div>
+      <div class="dialog-body">
+        <label>اسم الصفحة<input id="new-page-name" maxlength="180" required></label>
+        <label>الرابط المختصر بالإنجليزية<input id="new-page-slug" maxlength="100" pattern="[a-z0-9-]+" placeholder="new-page" dir="ltr" required></label>
+        <label>عنوان محركات البحث<input id="new-page-seo-title" maxlength="300"></label>
+        <label>وصف الصفحة<textarea id="new-page-description" rows="4" maxlength="600"></textarea></label>
+      </div>
+      <div class="dialog-footer"><button class="button button-muted" type="button" data-close-dialog="page-dialog">إلغاء</button><button class="button button-primary" type="submit">إنشاء الصفحة</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="page-settings-dialog" class="admin-dialog compact-dialog">
+    <form id="page-settings-form" method="dialog">
+      <div class="dialog-header"><div><span class="eyebrow-label">إعدادات الصفحة</span><h2>الاسم وSEO</h2></div><button class="dialog-close" type="button" data-close-dialog="page-settings-dialog">×</button></div>
+      <div class="dialog-body">
+        <label>اسم الصفحة<input id="settings-page-name" maxlength="180" required></label>
+        <label>عنوان محركات البحث<input id="settings-seo-title" maxlength="300"></label>
+        <label>الوصف التعريفي<textarea id="settings-seo-description" rows="4" maxlength="600"></textarea></label>
+        <label>حالة الصفحة<select id="settings-page-status"><option value="draft">مسودة</option><option value="published">منشورة</option><option value="archived">مؤرشفة</option></select></label>
+      </div>
+      <div class="dialog-footer"><button class="button button-muted" type="button" data-close-dialog="page-settings-dialog">إلغاء</button><button class="button button-primary" type="submit">حفظ الإعدادات</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="template-dialog" class="admin-dialog compact-dialog">
+    <form id="template-form" method="dialog">
+      <div class="dialog-header"><div><span class="eyebrow-label">سكشن جديد</span><h2>اختر القالب</h2></div><button class="dialog-close" type="button" data-close-dialog="template-dialog">×</button></div>
+      <div class="dialog-body"><div id="template-grid" class="template-grid"></div></div>
+      <div class="dialog-footer"><button class="button button-muted" type="button" data-close-dialog="template-dialog">إلغاء</button><button class="button button-primary" type="submit">إضافة السكشن</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="media-dialog" class="admin-dialog media-dialog">
+    <div class="dialog-header"><div><span class="eyebrow-label">مكتبة الصور</span><h2>اختر صورة</h2></div><button class="dialog-close" type="button" data-close-dialog="media-dialog">×</button></div>
+    <div class="dialog-body"><label class="search-field"><span>⌕</span><input id="media-dialog-search" type="search" placeholder="ابحث عن صورة"></label><div id="media-dialog-grid" class="media-grid"></div></div>
+  </dialog>
+
+  <script src="/admin/dashboard.js" defer></script>
+</body>
 </html>

@@ -1,402 +1,628 @@
-const emailNode = document.querySelector("#admin-email");
-const roleNode = document.querySelector("#admin-role");
-const messageNode = document.querySelector("#dashboard-message");
-const logoutButton = document.querySelector("#logout-button");
-const reloadButton = document.querySelector("#reload-sections-button");
-const saveOrderButton = document.querySelector("#save-order-button");
-const sectionsList = document.querySelector("#sections-list");
-const sectionsLoading = document.querySelector("#sections-loading");
-const pageNameNode = document.querySelector("#cms-page-name");
-const pageStatusNode = document.querySelector("#cms-page-status");
-const pageDescriptionNode = document.querySelector("#cms-page-description");
-const sectionsCountNode = document.querySelector("#cms-sections-count");
-const visibleCountNode = document.querySelector("#cms-visible-count");
-const hiddenCountNode = document.querySelector("#cms-hidden-count");
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const sectionTypeLabels = {
-  video_hero: "فيديو رئيسي",
-  image: "صورة",
-  hero: "واجهة رئيسية",
+const sectionTemplates = [
+  { type: "hero", name: "واجهة رئيسية", icon: "▰", content: { eyebrow: "نوهة", title: "عنوان رئيسي", body: "اكتب وصفًا مختصرًا للسكشن." } },
+  { type: "text", name: "نص تعريفي", icon: "¶", content: { title: "عنوان السكشن", body: "اكتب المحتوى هنا." } },
+  { type: "text_and_image", name: "نص وصورة", icon: "▣", content: { title: "عنوان السكشن", body: "اكتب المحتوى هنا.", imageUrl: "", imageAlt: "" } },
+  { type: "cards", name: "بطاقات", icon: "▦", content: { title: "عنوان البطاقات", items: [{ title: "بطاقة 1", text: "وصف البطاقة" }, { title: "بطاقة 2", text: "وصف البطاقة" }, { title: "بطاقة 3", text: "وصف البطاقة" }] } },
+  { type: "image_cards", name: "بطاقات صور", icon: "▧", content: { title: "عنوان البطاقات", items: [{ title: "عنصر 1", text: "وصف", imageUrl: "" }, { title: "عنصر 2", text: "وصف", imageUrl: "" }] } },
+  { type: "metrics", name: "أرقام وإحصائيات", icon: "%", content: { title: "أرقامنا", items: [{ title: "+100", text: "عدد العملاء" }, { title: "+20", text: "مشروعًا" }, { title: "24/7", text: "دعم وتشغيل" }] } },
+  { type: "gallery", name: "معرض صور", icon: "▥", content: { title: "معرض الصور", items: [{ imageUrl: "", imageAlt: "صورة 1" }, { imageUrl: "", imageAlt: "صورة 2" }] } },
+  { type: "call_to_action", name: "دعوة للتواصل", icon: "→", content: { eyebrow: "تواصل معنا", title: "هل تحتاج إلى خدمتنا؟", body: "فريقنا جاهز لدراسة احتياجك.", buttonLabel: "تواصل معنا", buttonUrl: "/contact.html" } }
+];
+
+const sectionTypeLabels = Object.fromEntries(sectionTemplates.map((item) => [item.type, item.name]));
+Object.assign(sectionTypeLabels, {
   form_and_text: "نموذج ونص",
-  announcement: "إعلان",
-  cards: "بطاقات",
-  metrics: "إحصائيات",
-  logo_grid: "شعارات",
-  image_cards: "بطاقات صور",
-  icon_grid: "أيقونات",
-  text_and_image: "نص وصورة",
-  call_to_action: "دعوة للتواصل"
-};
+  announcement: "شريط إعلان",
+  logo_grid: "شعارات وشركاء"
+});
+
+const cmsUpdates = "BroadcastChannel" in window ? new BroadcastChannel("nooha-cms-updates") : null;
+
+function freshPublicUrl(url) {
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}cms=${Date.now()}`;
+}
 
 const state = {
-  page: null,
+  session: null,
+  pages: [],
+  currentPage: null,
   sections: [],
+  media: [],
   orderDirty: false,
+  editingSectionId: null,
+  selectedTemplate: sectionTemplates[0].type,
   loading: false
 };
 
-function setMessage(text, type = "error") {
-  messageNode.textContent = text;
-  messageNode.classList.toggle("success", type === "success");
+const nodes = {
+  message: $("#global-message"),
+  email: $("#admin-email"),
+  role: $("#admin-role"),
+  pagesList: $("#pages-list"),
+  pageSearch: $("#page-search"),
+  overviewPages: $("#overview-pages"),
+  sectionsList: $("#sections-list"),
+  sectionsLoading: $("#sections-loading"),
+  pageEmpty: $("#page-empty"),
+  pageEditor: $("#page-editor-content"),
+  currentPageName: $("#current-page-name"),
+  currentPageStatus: $("#current-page-status"),
+  currentPageDescription: $("#current-page-description"),
+  previewLink: $("#preview-page-link"),
+  openSiteLink: $("#open-site-link"),
+  saveOrder: $("#save-order-button"),
+  publishPage: $("#publish-page-button"),
+  discardDraft: $("#discard-draft-button"),
+  unpublishedAlert: $("#unpublished-alert"),
+  statPages: $("#stat-pages"),
+  statSections: $("#stat-sections"),
+  statPending: $("#stat-pending"),
+  statVisible: $("#stat-visible"),
+  pageSectionsCount: $("#page-sections-count"),
+  pageVisibleCount: $("#page-visible-count"),
+  pagePendingCount: $("#page-pending-count"),
+  mediaGrid: $("#media-grid"),
+  mediaDialogGrid: $("#media-dialog-grid")
+};
+
+function showMessage(text, type = "error") {
+  nodes.message.textContent = text;
+  nodes.message.className = `global-message ${text ? "visible" : ""} ${type}`;
+  if (text) window.setTimeout(() => { if (nodes.message.textContent === text) showMessage(""); }, 5000);
 }
 
-function clearMessage() {
-  setMessage("");
-}
-
-function setLoading(isLoading) {
-  state.loading = isLoading;
-  reloadButton.disabled = isLoading;
-  saveOrderButton.disabled = isLoading || !state.orderDirty;
-  sectionsList.setAttribute("aria-busy", String(isLoading));
-  sectionsLoading.hidden = !isLoading;
-}
-
-function getErrorMessage(body, fallback) {
+function apiError(body, fallback) {
   const code = body?.error?.code;
+  const messages = {
+    cms_page_not_found: "تعذر العثور على الصفحة.",
+    cms_section_not_found: "السكشن المطلوب غير موجود.",
+    invalid_section_order: "ترتيب السكاشن غير صالح.",
+    page_exists: "يوجد صفحة بنفس الرابط المختصر.",
+    invalid_page: "تحقق من بيانات الصفحة.",
+    invalid_section: "تحقق من بيانات السكشن.",
+    last_section: "لا يمكن حذف آخر سكشن في الصفحة.",
+    cms_publish_verification_failed: "فشل التحقق من المحتوى المنشور. لم يتم اعتماد النشر."
+  };
+  return messages[code] || fallback;
+}
 
-  if (code === "cms_page_not_found") {
-    return "لم يتم العثور على إعداد الصفحة الرئيسية في قاعدة المحتوى.";
+function hasPendingChanges() {
+  return state.orderDirty || state.sections.some((section) => section.hasUnpublishedChanges);
+}
+
+function comparableJson(value) {
+  return JSON.stringify(value && typeof value === "object" ? value : {});
+}
+
+async function verifyPublishedPage(page, sections) {
+  const response = await fetch(`/api/cms/pages/${encodeURIComponent(page.slug)}?cms=${Date.now()}`, {
+    cache: "no-store",
+    headers: { Accept: "application/json", "Cache-Control": "no-cache" }
+  });
+  const publicBody = await response.json().catch(() => ({}));
+  if (!response.ok || !publicBody.ok || !Array.isArray(publicBody.sections)) {
+    throw new Error("تعذر التحقق من استجابة الصفحة العامة بعد النشر.");
   }
 
-  if (code === "invalid_section_order") {
-    return "تعذر حفظ الترتيب لأن قائمة السكاشن غير مكتملة.";
+  const visibleSections = sections.filter((section) => section.isVisible);
+  const publicIds = publicBody.sections.map((section) => section.id);
+  const expectedIds = visibleSections.map((section) => section.id);
+  if (publicIds.join("|") !== expectedIds.join("|")) {
+    throw new Error("الصفحة العامة لا تعرض ترتيب السكاشن المنشور بعد.");
   }
 
-  if (code === "cms_section_not_found") {
-    return "السكشن المطلوب لم يعد موجودًا. حدّث القائمة وحاول مرة أخرى.";
-  }
-
-  return fallback;
+  visibleSections.forEach((section, index) => {
+    const publicSection = publicBody.sections[index];
+    if (comparableJson(publicSection?.content) !== comparableJson(section.publishedContent)) {
+      throw new Error(`لم يتم التحقق من محتوى السكشن: ${section.displayName}`);
+    }
+  });
 }
 
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, {
     credentials: "same-origin",
     ...options,
-    headers: {
-      Accept: "application/json",
-      ...(options.headers || {})
-    }
+    headers: { Accept: "application/json", ...(options.headers || {}) }
   });
-
   const body = await response.json().catch(() => ({}));
-
   if (response.status === 401) {
     window.location.replace("/admin/login");
     throw new Error("unauthorized");
   }
-
   return { response, body };
 }
 
 async function loadSession() {
   const { response, body } = await fetchJson("/api/admin/session");
-
-  if (!response.ok || !body.authenticated) {
-    window.location.replace("/admin/login");
-    return false;
-  }
-
-  emailNode.textContent = body.user.email;
-  roleNode.textContent = body.user.role;
+  if (!response.ok || !body.authenticated) return false;
+  state.session = body.user;
+  nodes.email.textContent = body.user.email;
+  nodes.role.textContent = body.user.role === "owner" ? "المالك" : body.user.role;
   return true;
 }
 
-function updatePageSummary() {
-  const visibleCount = state.sections.filter((section) => section.isVisible).length;
-  const hiddenCount = state.sections.length - visibleCount;
-
-  sectionsCountNode.textContent = String(state.sections.length);
-  visibleCountNode.textContent = String(visibleCount);
-  hiddenCountNode.textContent = String(hiddenCount);
-
-  if (!state.page) {
-    return;
-  }
-
-  pageNameNode.textContent = state.page.displayName;
-  pageStatusNode.textContent = state.page.status === "published" ? "منشورة" : state.page.status;
-  pageStatusNode.classList.remove("status-badge-muted");
-  pageDescriptionNode.textContent = state.page.seoDescription || `ملف الصفحة: ${state.page.fileName}`;
+function setView(view) {
+  $$(".nav-item").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
+  $$(".view-panel").forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === view));
+  const titles = { overview: "لوحة التحكم", pages: "الصفحات والمحتوى", media: "مكتبة الصور", settings: "إعدادات الموقع" };
+  $("#view-title").textContent = titles[view] || "لوحة التحكم";
 }
 
-function createActionButton(label, action, sectionId, disabled = false) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "icon-button";
-  button.textContent = label;
-  button.dataset.action = action;
-  button.dataset.sectionId = sectionId;
-  button.disabled = disabled;
-  return button;
+function updateStats() {
+  const pageCount = state.pages.length;
+  const sectionCount = state.pages.reduce((sum, page) => sum + (page.sectionCount || 0), 0);
+  const pendingCount = state.pages.reduce((sum, page) => sum + (page.pendingSectionCount || 0), 0);
+  const visibleCount = state.pages.reduce((sum, page) => sum + (page.visibleSectionCount || 0), 0);
+  nodes.statPages.textContent = String(pageCount);
+  nodes.statSections.textContent = String(sectionCount);
+  nodes.statPending.textContent = String(pendingCount);
+  nodes.statVisible.textContent = String(visibleCount);
 }
 
-function createSectionCard(section, index) {
-  const article = document.createElement("article");
-  article.className = "section-card";
-  article.dataset.sectionId = section.id;
-  article.classList.toggle("section-card-hidden", !section.isVisible);
+function pageStatusLabel(status) {
+  return status === "published" ? "منشورة" : status === "draft" ? "مسودة" : "مؤرشفة";
+}
 
-  const orderColumn = document.createElement("div");
-  orderColumn.className = "section-order-column";
+function renderOverviewPages() {
+  nodes.overviewPages.replaceChildren();
+  state.pages.slice(0, 6).forEach((page) => {
+    const button = document.createElement("button");
+    button.className = "overview-page-row";
+    button.type = "button";
+    button.innerHTML = `<span class="page-file-icon">▤</span><span><strong></strong><small></small></span><span class="status-badge ${page.status}"></span>`;
+    $("strong", button).textContent = page.displayName;
+    $("small", button).textContent = `${page.sectionCount} سكشن`;
+    $(".status-badge", button).textContent = pageStatusLabel(page.status);
+    button.addEventListener("click", () => { setView("pages"); selectPage(page.slug); });
+    nodes.overviewPages.append(button);
+  });
+}
 
-  const orderNumber = document.createElement("span");
-  orderNumber.className = "section-order-number";
-  orderNumber.textContent = String(index + 1);
-  orderColumn.append(orderNumber);
-  orderColumn.append(createActionButton("↑", "move-up", section.id, index === 0));
-  orderColumn.append(createActionButton("↓", "move-down", section.id, index === state.sections.length - 1));
+function renderPagesList(filter = "") {
+  nodes.pagesList.replaceChildren();
+  const query = filter.trim().toLowerCase();
+  const pages = state.pages.filter((page) => `${page.displayName} ${page.slug}`.toLowerCase().includes(query));
+  pages.forEach((page) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "page-list-item";
+    button.classList.toggle("active", state.currentPage?.slug === page.slug);
+    button.innerHTML = `<span class="page-file-icon">▤</span><span class="page-list-copy"><strong></strong><small></small></span><span class="page-count"></span><span class="page-draft-dot" hidden>مسودة</span>`;
+    $("strong", button).textContent = page.displayName;
+    $("small", button).textContent = page.slug;
+    $(".page-count", button).textContent = String(page.sectionCount || 0);
+    $(".page-draft-dot", button).hidden = !(page.pendingSectionCount > 0);
+    button.addEventListener("click", () => selectPage(page.slug));
+    nodes.pagesList.append(button);
+  });
+}
 
-  const content = document.createElement("div");
-  content.className = "section-card-content";
+async function loadPages({ keepSelection = true } = {}) {
+  const { response, body } = await fetchJson("/api/admin/cms/pages");
+  if (!response.ok) throw new Error(apiError(body, "تعذر تحميل الصفحات."));
+  const currentSlug = keepSelection ? state.currentPage?.slug : null;
+  state.pages = body.pages || [];
+  updateStats();
+  renderOverviewPages();
+  renderPagesList(nodes.pageSearch.value);
+  if (currentSlug && state.pages.some((page) => page.slug === currentSlug)) await selectPage(currentSlug, false);
+}
 
-  const titleRow = document.createElement("div");
-  titleRow.className = "section-title-row";
+function sectionIcon(type) {
+  return ({ hero: "▰", text: "¶", text_and_image: "▣", form_and_text: "▱", announcement: "!", cards: "▦", image_cards: "▧", metrics: "%", logo_grid: "◇", gallery: "▥", call_to_action: "→" })[type] || "▤";
+}
 
-  const title = document.createElement("h3");
-  title.textContent = section.displayName;
-
-  const typeBadge = document.createElement("span");
-  typeBadge.className = "section-type-badge";
-  typeBadge.textContent = sectionTypeLabels[section.sectionType] || section.sectionType;
-
-  titleRow.append(title, typeBadge);
-
-  const key = document.createElement("p");
-  key.className = "section-key";
-  key.textContent = section.sectionKey;
-
-  const note = document.createElement("p");
-  note.className = "section-note";
-  note.textContent = "تعديل النصوص والصور الخاصة بهذا السكشن سيضاف في الخطوة التالية.";
-
-  content.append(titleRow, key, note);
-
-  const controls = document.createElement("div");
-  controls.className = "section-card-controls";
-
-  const toggleLabel = document.createElement("label");
-  toggleLabel.className = "visibility-toggle";
-
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.checked = section.isVisible;
-  checkbox.dataset.action = "toggle-visibility";
-  checkbox.dataset.sectionId = section.id;
-
-  const toggleText = document.createElement("span");
-  toggleText.textContent = section.isVisible ? "ظاهر" : "مخفي";
-
-  toggleLabel.append(checkbox, toggleText);
-
-  const editButton = document.createElement("button");
-  editButton.type = "button";
-  editButton.className = "secondary-button compact-button";
-  editButton.textContent = "تعديل المحتوى";
-  editButton.disabled = true;
-  editButton.title = "سيتم تفعيل محرر المحتوى في الخطوة التالية";
-
-  controls.append(toggleLabel, editButton);
-  article.append(orderColumn, content, controls);
-
-  return article;
+function renderPageSummary() {
+  const visible = state.sections.filter((section) => section.isVisible).length;
+  const pending = state.sections.filter((section) => section.hasUnpublishedChanges).length;
+  const hasPending = hasPendingChanges();
+  nodes.pageSectionsCount.textContent = String(state.sections.length);
+  nodes.pageVisibleCount.textContent = String(visible);
+  nodes.pagePendingCount.textContent = String(pending);
+  nodes.currentPageName.textContent = state.currentPage.displayName;
+  nodes.currentPageStatus.textContent = pageStatusLabel(state.currentPage.status);
+  nodes.currentPageStatus.className = `status-badge ${state.currentPage.status}`;
+  nodes.currentPageDescription.textContent = state.currentPage.seoDescription || `الرابط: ${state.currentPage.publicUrl}`;
+  const previewUrl = freshPublicUrl(state.currentPage.publicUrl);
+  nodes.previewLink.href = previewUrl;
+  nodes.openSiteLink.href = previewUrl;
+  nodes.publishPage.classList.toggle("attention", hasPending);
+  nodes.unpublishedAlert.hidden = !hasPending;
+  nodes.discardDraft.hidden = !hasPending;
 }
 
 function renderSections() {
-  sectionsList.replaceChildren();
-
-  if (state.sections.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "empty-state";
-    empty.textContent = "لا توجد سكاشن مسجلة لهذه الصفحة.";
-    sectionsList.append(empty);
-  } else {
-    state.sections.forEach((section, index) => {
-      sectionsList.append(createSectionCard(section, index));
-    });
-  }
-
-  updatePageSummary();
-  saveOrderButton.disabled = state.loading || !state.orderDirty;
+  nodes.sectionsList.replaceChildren();
+  state.sections.forEach((section, index) => {
+    const card = document.createElement("article");
+    card.className = `section-card ${section.isVisible ? "" : "hidden-section"}`;
+    card.dataset.sectionId = section.id;
+    card.innerHTML = `
+      <div class="drag-area"><span class="drag-handle">⋮⋮</span><strong>${index + 1}</strong></div>
+      <div class="section-symbol"></div>
+      <div class="section-copy"><div class="section-title-line"><h3></h3><span class="section-type"></span><span class="draft-badge" hidden>غير منشور</span></div><p></p></div>
+      <div class="section-actions">
+        <label class="switch"><input type="checkbox" data-action="visibility"><span></span><em></em></label>
+        <button class="icon-button" data-action="up" type="button" title="تحريك لأعلى">↑</button>
+        <button class="icon-button" data-action="down" type="button" title="تحريك لأسفل">↓</button>
+        <button class="button button-secondary compact" data-action="edit" type="button">تعديل</button>
+        <button class="icon-button danger" data-action="delete" type="button" title="حذف">×</button>
+      </div>`;
+    $(".section-symbol", card).textContent = sectionIcon(section.sectionType);
+    $("h3", card).textContent = section.displayName;
+    $(".section-type", card).textContent = sectionTypeLabels[section.sectionType] || section.sectionType;
+    $(".section-copy p", card).textContent = section.sectionKey;
+    $(".draft-badge", card).hidden = !section.hasUnpublishedChanges;
+    const checkbox = $('input[data-action="visibility"]', card);
+    checkbox.checked = section.isVisible;
+    $(".switch em", card).textContent = section.isVisible ? "ظاهر" : "مخفي";
+    $('button[data-action="up"]', card).disabled = index === 0;
+    $('button[data-action="down"]', card).disabled = index === state.sections.length - 1;
+    nodes.sectionsList.append(card);
+  });
+  nodes.saveOrder.disabled = !state.orderDirty;
+  renderPageSummary();
 }
 
-async function loadHomePage() {
-  clearMessage();
-  setLoading(true);
-
-  try {
-    const { response, body } = await fetchJson("/api/admin/cms/pages/home");
-
-    if (!response.ok) {
-      throw new Error(getErrorMessage(body, "تعذر تحميل محتوى الصفحة الرئيسية."));
-    }
-
-    state.page = body.page;
-    state.sections = Array.isArray(body.sections) ? body.sections : [];
-    state.orderDirty = false;
-    renderSections();
-  } catch (error) {
-    if (error.message !== "unauthorized") {
-      setMessage(error.message || "تعذر تحميل محتوى الصفحة الرئيسية.");
-    }
-  } finally {
-    setLoading(false);
-  }
+async function selectPage(slug, rerenderList = true) {
+  nodes.pageEmpty.hidden = true;
+  nodes.pageEditor.hidden = false;
+  nodes.sectionsLoading.hidden = false;
+  nodes.sectionsList.hidden = true;
+  const { response, body } = await fetchJson(`/api/admin/cms/pages/${encodeURIComponent(slug)}`);
+  if (!response.ok) throw new Error(apiError(body, "تعذر تحميل الصفحة."));
+  state.currentPage = body.page;
+  state.sections = body.sections || [];
+  state.orderDirty = false;
+  nodes.sectionsLoading.hidden = true;
+  nodes.sectionsList.hidden = false;
+  renderSections();
+  if (rerenderList) renderPagesList(nodes.pageSearch.value);
 }
 
-function moveSection(sectionId, direction) {
-  const currentIndex = state.sections.findIndex((section) => section.id === sectionId);
-  const nextIndex = currentIndex + direction;
-
-  if (currentIndex < 0 || nextIndex < 0 || nextIndex >= state.sections.length) {
-    return;
-  }
-
-  const nextSections = [...state.sections];
-  const [movedSection] = nextSections.splice(currentIndex, 1);
-  nextSections.splice(nextIndex, 0, movedSection);
-
-  state.sections = nextSections;
+function moveSection(id, direction) {
+  const index = state.sections.findIndex((section) => section.id === id);
+  const next = index + direction;
+  if (index < 0 || next < 0 || next >= state.sections.length) return;
+  const copy = [...state.sections];
+  const [moved] = copy.splice(index, 1);
+  copy.splice(next, 0, moved);
+  state.sections = copy;
   state.orderDirty = true;
-  clearMessage();
   renderSections();
 }
 
-async function updateVisibility(sectionId, isVisible, checkbox) {
-  const section = state.sections.find((item) => item.id === sectionId);
-
-  if (!section) {
-    return;
-  }
-
-  checkbox.disabled = true;
-  clearMessage();
-
-  try {
-    const { response, body } = await fetchJson(
-      `/api/admin/cms/sections/${encodeURIComponent(sectionId)}/visibility`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ isVisible })
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(getErrorMessage(body, "تعذر تحديث حالة ظهور السكشن."));
-    }
-
-    section.isVisible = body.section?.isVisible ?? isVisible;
-    renderSections();
-    setMessage(isVisible ? "تم إظهار السكشن." : "تم إخفاء السكشن.", "success");
-  } catch (error) {
-    checkbox.checked = !isVisible;
-    setMessage(error.message || "تعذر تحديث حالة ظهور السكشن.");
-  } finally {
-    checkbox.disabled = false;
-  }
-}
-
 async function saveOrder() {
-  if (!state.orderDirty || state.loading) {
-    return;
-  }
+  const { response, body } = await fetchJson(`/api/admin/cms/pages/${state.currentPage.slug}/sections/order`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sectionIds: state.sections.map((section) => section.id) })
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر حفظ الترتيب."));
+  state.currentPage = body.page;
+  state.sections = body.sections;
+  state.orderDirty = false;
+  renderSections();
+  showMessage("تم حفظ ترتيب السكاشن.", "success");
+}
 
-  saveOrderButton.disabled = true;
-  reloadButton.disabled = true;
-  clearMessage();
+async function toggleVisibility(section, checked) {
+  const { response, body } = await fetchJson(`/api/admin/cms/sections/${section.id}/visibility`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ isVisible: checked })
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر تحديث حالة الظهور."));
+  Object.assign(section, body.section);
+  renderSections();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  showMessage(checked ? "تم إظهار السكشن." : "تم إخفاء السكشن.", "success");
+}
 
+function itemRow(item = {}) {
+  const row = document.createElement("div");
+  row.className = "item-editor-row";
+  row.innerHTML = `
+    <div class="item-row-top"><strong>عنصر</strong><button type="button" class="remove-item">حذف</button></div>
+    <div class="form-grid two-columns">
+      <label>العنوان<input data-item="title" maxlength="240"></label>
+      <label>النص<input data-item="text" maxlength="1500"></label>
+      <label>الصورة<div class="input-action"><input data-item="imageUrl" maxlength="1000"><button type="button" class="choose-item-image">اختيار</button></div></label>
+      <label>وصف الصورة<input data-item="imageAlt" maxlength="300"></label>
+      <label>نص الرابط<input data-item="linkLabel" maxlength="160"></label>
+      <label>الرابط<input data-item="linkUrl" maxlength="1000"></label>
+    </div>`;
+  $$('[data-item]', row).forEach((input) => { input.value = item[input.dataset.item] || ""; });
+  $(".remove-item", row).addEventListener("click", () => row.remove());
+  $(".choose-item-image", row).addEventListener("click", () => openMediaPicker($('[data-item="imageUrl"]', row)));
+  return row;
+}
+
+function populateSectionTypeSelect() {
+  const select = $("#section-type");
+  select.replaceChildren();
+  Object.entries(sectionTypeLabels).forEach(([value, label]) => {
+    const option = document.createElement("option"); option.value = value; option.textContent = label; select.append(option);
+  });
+}
+
+function openSectionEditor(section) {
+  state.editingSectionId = section.id;
+  const content = section.draftContent || {};
+  $("#section-dialog-title").textContent = `تعديل: ${section.displayName}`;
+  $("#section-display-name").value = section.displayName || "";
+  $("#section-type").value = section.sectionType;
+  ["eyebrow", "title", "body", "imageUrl", "imageAlt", "buttonLabel", "buttonUrl"].forEach((field) => {
+    $(`#section-${field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`).value = content[field] || "";
+  });
+  const editor = $("#items-editor"); editor.replaceChildren();
+  (content.items || []).forEach((item) => editor.append(itemRow(item)));
+  $("#section-dialog").showModal();
+}
+
+function collectItems() {
+  return $$(".item-editor-row", $("#items-editor")).map((row) => {
+    const item = {};
+    $$('[data-item]', row).forEach((input) => { item[input.dataset.item] = input.value.trim(); });
+    return item;
+  });
+}
+
+async function saveSection(event) {
+  event.preventDefault();
+  const section = state.sections.find((item) => item.id === state.editingSectionId);
+  if (!section) return;
+  const content = {
+    eyebrow: $("#section-eyebrow").value,
+    title: $("#section-title").value,
+    body: $("#section-body").value,
+    imageUrl: $("#section-image-url").value,
+    imageAlt: $("#section-image-alt").value,
+    buttonLabel: $("#section-button-label").value,
+    buttonUrl: $("#section-button-url").value,
+    items: collectItems()
+  };
+  const { response, body } = await fetchJson(`/api/admin/cms/sections/${section.id}/content`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ displayName: $("#section-display-name").value, sectionType: $("#section-type").value, content })
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر حفظ السكشن."));
+  Object.assign(section, body.section);
+  $("#section-dialog").close();
+  renderSections();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  showMessage("تم حفظ مسودة السكشن. اضغط نشر التغييرات لإظهارها في الموقع.", "success");
+}
+
+async function publishCurrentPage() {
+  nodes.publishPage.disabled = true;
+  nodes.publishPage.textContent = "جار التحقق...";
   try {
-    const { response, body } = await fetchJson("/api/admin/cms/pages/home/sections/order", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        sectionIds: state.sections.map((section) => section.id)
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(getErrorMessage(body, "تعذر حفظ ترتيب السكاشن."));
-    }
-
-    state.sections = Array.isArray(body.sections) ? body.sections : state.sections;
-    state.orderDirty = false;
+    const { response, body } = await fetchJson(`/api/admin/cms/pages/${state.currentPage.slug}/publish`, { method: "POST" });
+    if (!response.ok) throw new Error(apiError(body, "تعذر نشر الصفحة."));
+    await verifyPublishedPage(body.page, body.sections || []);
+    state.currentPage = body.page;
+    state.sections = body.sections;
     renderSections();
-    setMessage("تم حفظ ترتيب السكاشن.", "success");
-  } catch (error) {
-    setMessage(error.message || "تعذر حفظ ترتيب السكاشن.");
+    await loadPages({ keepSelection: false });
+    renderPagesList(nodes.pageSearch.value);
+    cmsUpdates?.postMessage({ type: "published", slug: state.currentPage.slug, publishedAt: Date.now() });
+    renderPageSummary();
+    showMessage("تم نشر الصفحة والتحقق من المحتوى العام.", "success");
   } finally {
-    reloadButton.disabled = false;
-    saveOrderButton.disabled = !state.orderDirty;
+    nodes.publishPage.disabled = false;
+    nodes.publishPage.textContent = "نشر التغييرات";
   }
 }
 
-sectionsList.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-action]");
+async function discardCurrentDraft() {
+  if (!state.currentPage || !hasPendingChanges()) return;
+  const { response, body } = await fetchJson(`/api/admin/cms/pages/${state.currentPage.slug}/discard`, { method: "POST" });
+  if (!response.ok) throw new Error(apiError(body, "تعذر إلغاء التغييرات غير المنشورة."));
+  state.currentPage = body.page;
+  state.sections = body.sections;
+  state.orderDirty = false;
+  renderSections();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  showMessage("تم إلغاء المسودة والرجوع إلى آخر نسخة منشورة.", "success");
+}
 
-  if (!button) {
-    return;
-  }
+async function deleteSection(section) {
+  if (!window.confirm(`حذف سكشن «${section.displayName}»؟ لا يمكن التراجع عن العملية.`)) return;
+  const { response, body } = await fetchJson(`/api/admin/cms/sections/${section.id}`, { method: "DELETE" });
+  if (!response.ok) throw new Error(apiError(body, "تعذر حذف السكشن."));
+  state.sections = state.sections.filter((item) => item.id !== section.id);
+  renderSections();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  showMessage("تم حذف السكشن.", "success");
+}
 
-  if (button.dataset.action === "move-up") {
-    moveSection(button.dataset.sectionId, -1);
-  }
+function renderTemplateGrid() {
+  const grid = $("#template-grid"); grid.replaceChildren();
+  sectionTemplates.forEach((template) => {
+    const label = document.createElement("label");
+    label.className = "template-card";
+    label.innerHTML = `<input type="radio" name="template" value="${template.type}"><span class="template-icon">${template.icon}</span><strong>${template.name}</strong><small>قالب جاهز قابل للتعديل</small>`;
+    const input = $("input", label); input.checked = template.type === state.selectedTemplate;
+    input.addEventListener("change", () => { state.selectedTemplate = template.type; $$(".template-card").forEach((card) => card.classList.toggle("selected", $("input", card).checked)); });
+    label.classList.toggle("selected", input.checked);
+    grid.append(label);
+  });
+}
 
-  if (button.dataset.action === "move-down") {
-    moveSection(button.dataset.sectionId, 1);
-  }
-});
+async function addSection(event) {
+  event.preventDefault();
+  const template = sectionTemplates.find((item) => item.type === state.selectedTemplate);
+  const { response, body } = await fetchJson(`/api/admin/cms/pages/${state.currentPage.slug}/sections`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sectionType: template.type, displayName: template.name, content: template.content })
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر إضافة السكشن."));
+  state.currentPage = body.page;
+  state.sections = body.sections;
+  $("#template-dialog").close();
+  renderSections();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  showMessage("تمت إضافة السكشن كمسودة.", "success");
+}
 
-sectionsList.addEventListener("change", (event) => {
-  const checkbox = event.target.closest('input[data-action="toggle-visibility"]');
+async function createPage(event) {
+  event.preventDefault();
+  const payload = {
+    displayName: $("#new-page-name").value,
+    slug: $("#new-page-slug").value,
+    seoTitle: $("#new-page-seo-title").value,
+    seoDescription: $("#new-page-description").value
+  };
+  const { response, body } = await fetchJson("/api/admin/cms/pages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر إنشاء الصفحة."));
+  $("#page-dialog").close();
+  $("#page-form").reset();
+  await loadPages({ keepSelection: false });
+  setView("pages");
+  await selectPage(body.page.slug);
+  showMessage("تم إنشاء الصفحة. عدّل محتواها ثم انشرها.", "success");
+}
 
-  if (!checkbox) {
-    return;
-  }
+function openPageSettings() {
+  $("#settings-page-name").value = state.currentPage.displayName || "";
+  $("#settings-seo-title").value = state.currentPage.seoTitle || "";
+  $("#settings-seo-description").value = state.currentPage.seoDescription || "";
+  $("#settings-page-status").value = state.currentPage.status;
+  $("#page-settings-dialog").showModal();
+}
 
-  updateVisibility(checkbox.dataset.sectionId, checkbox.checked, checkbox);
-});
+async function savePageSettings(event) {
+  event.preventDefault();
+  const { response, body } = await fetchJson(`/api/admin/cms/pages/${state.currentPage.slug}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      displayName: $("#settings-page-name").value,
+      seoTitle: $("#settings-seo-title").value,
+      seoDescription: $("#settings-seo-description").value,
+      status: $("#settings-page-status").value
+    })
+  });
+  if (!response.ok) throw new Error(apiError(body, "تعذر حفظ إعدادات الصفحة."));
+  state.currentPage = body.page;
+  state.sections = body.sections;
+  $("#page-settings-dialog").close();
+  await loadPages({ keepSelection: false });
+  renderPagesList(nodes.pageSearch.value);
+  renderSections();
+  showMessage("تم حفظ إعدادات الصفحة.", "success");
+}
 
-reloadButton.addEventListener("click", () => {
-  loadHomePage();
-});
+async function loadMedia() {
+  const response = await fetch("/admin/media-manifest.json", { credentials: "same-origin" });
+  state.media = response.ok ? await response.json() : [];
+  renderMedia(state.media, nodes.mediaGrid, null);
+}
 
-saveOrderButton.addEventListener("click", () => {
-  saveOrder();
-});
+function renderMedia(media, container, targetInput) {
+  container.replaceChildren();
+  media.slice(0, 250).forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "media-card";
+    button.innerHTML = `<img loading="lazy"><span></span>`;
+    $("img", button).src = item.path;
+    $("img", button).alt = item.name;
+    $("span", button).textContent = item.name;
+    if (targetInput) button.addEventListener("click", () => { targetInput.value = item.path; $("#media-dialog").close(); });
+    container.append(button);
+  });
+}
 
-logoutButton.addEventListener("click", async () => {
-  logoutButton.disabled = true;
-  clearMessage();
+function openMediaPicker(targetInput) {
+  state.mediaTarget = targetInput;
+  $("#media-dialog-search").value = "";
+  renderMedia(state.media, nodes.mediaDialogGrid, targetInput);
+  $("#media-dialog").showModal();
+}
 
+function filterMedia(value, container, targetInput = null) {
+  const query = value.trim().toLowerCase();
+  renderMedia(state.media.filter((item) => item.name.toLowerCase().includes(query)), container, targetInput);
+}
+
+async function logout() {
+  await fetchJson("/api/admin/logout", { method: "POST" });
+  window.location.replace("/admin/login");
+}
+
+function bindEvents() {
+  $$(".nav-item").forEach((button) => button.addEventListener("click", () => setView(button.dataset.view)));
+  $$('[data-go-pages]').forEach((button) => button.addEventListener("click", () => setView("pages")));
+  $("#logout-button").addEventListener("click", () => logout().catch((error) => showMessage(error.message)));
+  nodes.pageSearch.addEventListener("input", () => renderPagesList(nodes.pageSearch.value));
+  nodes.saveOrder.addEventListener("click", () => saveOrder().catch((error) => showMessage(error.message)));
+  nodes.publishPage.addEventListener("click", () => publishCurrentPage().catch((error) => showMessage(error.message)));
+  nodes.discardDraft.addEventListener("click", () => discardCurrentDraft().catch((error) => showMessage(error.message)));
+  $("#page-settings-button").addEventListener("click", openPageSettings);
+  $("#add-section-button").addEventListener("click", () => { renderTemplateGrid(); $("#template-dialog").showModal(); });
+  $("#new-page-button").addEventListener("click", () => $("#page-dialog").showModal());
+  $("#rail-new-page").addEventListener("click", () => $("#page-dialog").showModal());
+  $("#section-form").addEventListener("submit", (event) => saveSection(event).catch((error) => showMessage(error.message)));
+  $("#page-form").addEventListener("submit", (event) => createPage(event).catch((error) => showMessage(error.message)));
+  $("#page-settings-form").addEventListener("submit", (event) => savePageSettings(event).catch((error) => showMessage(error.message)));
+  $("#template-form").addEventListener("submit", (event) => addSection(event).catch((error) => showMessage(error.message)));
+  $("#add-item-button").addEventListener("click", () => $("#items-editor").append(itemRow()));
+  $("#choose-image-button").addEventListener("click", () => openMediaPicker($("#section-image-url")));
+  $("#media-search").addEventListener("input", (event) => filterMedia(event.target.value, nodes.mediaGrid));
+  $("#media-dialog-search").addEventListener("input", (event) => filterMedia(event.target.value, nodes.mediaDialogGrid, state.mediaTarget));
+  $$('[data-close-dialog]').forEach((button) => button.addEventListener("click", () => $(`#${button.dataset.closeDialog}`).close()));
+
+  nodes.sectionsList.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+    const card = button.closest(".section-card");
+    const section = state.sections.find((item) => item.id === card.dataset.sectionId);
+    if (!section) return;
+    if (button.dataset.action === "up") moveSection(section.id, -1);
+    if (button.dataset.action === "down") moveSection(section.id, 1);
+    if (button.dataset.action === "edit") openSectionEditor(section);
+    if (button.dataset.action === "delete") deleteSection(section).catch((error) => showMessage(error.message));
+  });
+
+  nodes.sectionsList.addEventListener("change", (event) => {
+    const input = event.target.closest('input[data-action="visibility"]');
+    if (!input) return;
+    const card = input.closest(".section-card");
+    const section = state.sections.find((item) => item.id === card.dataset.sectionId);
+    if (!section) return;
+    input.disabled = true;
+    toggleVisibility(section, input.checked).catch((error) => { input.checked = !input.checked; showMessage(error.message); }).finally(() => { input.disabled = false; });
+  });
+}
+
+async function init() {
   try {
-    await fetchJson("/api/admin/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({})
-    });
-    window.location.replace("/admin/login");
-  } catch {
-    setMessage("تعذر تسجيل الخروج الآن.");
-    logoutButton.disabled = false;
-  }
-});
-
-async function initializeDashboard() {
-  const authenticated = await loadSession();
-
-  if (authenticated) {
-    await loadHomePage();
+    populateSectionTypeSelect();
+    bindEvents();
+    if (!(await loadSession())) return window.location.replace("/admin/login");
+    await Promise.all([loadPages({ keepSelection: false }), loadMedia()]);
+    if (state.pages.length) await selectPage(state.pages[0].slug);
+  } catch (error) {
+    if (error.message !== "unauthorized") showMessage(error.message || "تعذر تشغيل لوحة التحكم.");
   }
 }
 
-initializeDashboard().catch(() => {
-  setMessage("تعذر تشغيل لوحة التحكم الآن.");
-});
+document.addEventListener("DOMContentLoaded", init);

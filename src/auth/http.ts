@@ -17,7 +17,7 @@ export const ADMIN_SECURITY_HEADERS = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()"
 };
 
-export const MAX_JSON_BODY_BYTES = 16 * 1024;
+export const MAX_JSON_BODY_BYTES = 128 * 1024;
 
 export class HttpError extends Error {
   constructor(
