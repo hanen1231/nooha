@@ -1,0 +1,6 @@
+﻿.vscode/
+dist/
+node_modules/
+.wrangler/
+.dev.vars
+.dev.vars.*
