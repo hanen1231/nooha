@@ -272,3 +272,85 @@ export async function deleteCmsSection(db: D1Database, sectionId: string): Promi
   const result = await db.prepare(`DELETE FROM cms_sections WHERE id = ?`).bind(sectionId).run();
   return Number(result.meta.changes ?? 0) === 1;
 }
+
+
+export interface CmsSiteSettingRow {
+  setting_key: string;
+  display_name: string;
+  draft_json: string;
+  published_json: string;
+  updated_at: string;
+  published_at: string | null;
+}
+
+export async function listCmsSiteSettings(db: D1Database): Promise<CmsSiteSettingRow[]> {
+  const result = await db
+    .prepare(
+      `SELECT setting_key, display_name, draft_json, published_json, updated_at, published_at
+       FROM cms_site_settings
+       ORDER BY CASE setting_key WHEN 'header' THEN 1 WHEN 'footer' THEN 2 WHEN 'contact' THEN 3 ELSE 9 END,
+                display_name COLLATE NOCASE ASC`
+    )
+    .all<CmsSiteSettingRow>();
+
+  return result.results ?? [];
+}
+
+export async function getCmsSiteSettingByKey(
+  db: D1Database,
+  settingKey: string
+): Promise<CmsSiteSettingRow | null> {
+  return db
+    .prepare(
+      `SELECT setting_key, display_name, draft_json, published_json, updated_at, published_at
+       FROM cms_site_settings
+       WHERE setting_key = ?
+       LIMIT 1`
+    )
+    .bind(settingKey)
+    .first<CmsSiteSettingRow>();
+}
+
+export async function updateCmsSiteSettingDraft(
+  db: D1Database,
+  params: { settingKey: string; contentJson: string; updatedAt: string }
+): Promise<boolean> {
+  const result = await db
+    .prepare(
+      `UPDATE cms_site_settings
+       SET draft_json = ?, updated_at = ?
+       WHERE setting_key = ?`
+    )
+    .bind(params.contentJson, params.updatedAt, params.settingKey)
+    .run();
+
+  return Number(result.meta.changes ?? 0) === 1;
+}
+
+export async function publishCmsSiteSettings(db: D1Database, now: string): Promise<void> {
+  const result = await db
+    .prepare(
+      `UPDATE cms_site_settings
+       SET published_json = draft_json, published_at = ?, updated_at = ?`
+    )
+    .bind(now, now)
+    .run();
+
+  if (Number(result.meta.changes ?? 0) < 3) {
+    throw new Error("Unable to publish every CMS site setting.");
+  }
+}
+
+export async function discardCmsSiteSettingsDraft(db: D1Database, now: string): Promise<void> {
+  const result = await db
+    .prepare(
+      `UPDATE cms_site_settings
+       SET draft_json = published_json, updated_at = ?`
+    )
+    .bind(now)
+    .run();
+
+  if (Number(result.meta.changes ?? 0) < 3) {
+    throw new Error("Unable to discard every CMS site setting draft.");
+  }
+}

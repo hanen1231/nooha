@@ -249,17 +249,143 @@
     });
   }
 
+
+  function setNodeText(node, value) {
+    if (node && isString(value)) node.textContent = value.trim();
+  }
+
+  function updateLinkCollection(nodes, items) {
+    if (!Array.isArray(items)) return;
+    nodes.forEach((node, index) => {
+      const item = items[index];
+      const wrapper = node.closest(".reference-nav-item") || node;
+      wrapper.hidden = !item;
+      if (!item) return;
+      node.textContent = item.label || "";
+      node.href = item.url || "#";
+      const current = new URL(window.location.href).pathname.replace(/\/$/, "/index.html");
+      const target = new URL(node.href, window.location.origin).pathname;
+      node.classList.toggle("active", current === target);
+    });
+  }
+
+  function applyHeaderSettings(header) {
+    if (!header || typeof header !== "object") return;
+    document.querySelectorAll(".brand img").forEach((image) => {
+      if (header.logoUrl) image.src = header.logoUrl;
+      if (isString(header.logoAlt)) image.alt = header.logoAlt.trim();
+    });
+    document.querySelectorAll(".brand strong").forEach((node) => setNodeText(node, header.siteName));
+    document.querySelectorAll(".brand small:not([lang])").forEach((node) => setNodeText(node, header.siteTagline));
+
+    document.querySelectorAll("nav[data-nav]").forEach((nav) => {
+      const links = nav.classList.contains("reference-nav")
+        ? [...nav.querySelectorAll(":scope > .reference-nav-item > a")]
+        : [...nav.querySelectorAll(":scope > a")];
+      updateLinkCollection(links, header.navItems);
+    });
+  }
+
+  function footerColumnByHeading(fragment) {
+    return [...document.querySelectorAll(".site-footer .footer-grid > div")].find((column) =>
+      column.querySelector("h3")?.textContent?.includes(fragment)
+    );
+  }
+
+  function updateFooterLinks(column, items) {
+    if (!column || !Array.isArray(items)) return;
+    const heading = column.querySelector("h3");
+    const links = [...column.querySelectorAll(":scope > a")];
+    items.forEach((item, index) => {
+      let link = links[index];
+      if (!link) {
+        link = document.createElement("a");
+        column.append(link);
+        links.push(link);
+      }
+      link.hidden = false;
+      link.textContent = item.label || "";
+      link.href = item.url || "#";
+    });
+    links.slice(items.length).forEach((link) => { link.hidden = true; });
+    if (heading) heading.hidden = items.length === 0;
+  }
+
+  function applyFooterSettings(footer) {
+    if (!footer || typeof footer !== "object") return;
+    document.querySelectorAll(".site-footer .footer-grid > div:first-child > p").forEach((node) => setNodeText(node, footer.summary));
+    updateFooterLinks(footerColumnByHeading("روابط"), footer.quickLinks);
+    updateFooterLinks(footerColumnByHeading("مطابخ"), footer.kitchenLinks);
+    const bottom = document.querySelector(".site-footer .footer-bottom");
+    if (bottom) {
+      setNodeText(bottom.children[0], footer.copyright);
+      setNodeText(bottom.children[1], footer.secondaryText);
+    }
+  }
+
+  function applyContactSettings(contact) {
+    if (!contact || typeof contact !== "object") return;
+    if (contact.email) {
+      document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
+        link.href = `mailto:${contact.email}`;
+        if (link.textContent?.includes("@")) link.textContent = contact.email;
+      });
+    }
+    if (contact.phone) {
+      document.querySelectorAll('a[href^="tel:"]').forEach((link) => { link.href = `tel:${contact.phone}`; });
+    }
+    if (contact.whatsappNumber) {
+      document.querySelectorAll('[data-whatsapp-link], a[href*="wa.me/"]').forEach((link) => {
+        link.href = `https://wa.me/${contact.whatsappNumber.replace(/\D/g, "")}`;
+      });
+    }
+    if (contact.instagramUrl) document.querySelectorAll('a[href*="instagram.com"]').forEach((link) => { link.href = contact.instagramUrl; });
+    if (contact.snapchatUrl) document.querySelectorAll('a[href*="snapchat.com"]').forEach((link) => { link.href = contact.snapchatUrl; });
+
+    document.querySelectorAll(".contact-method").forEach((method) => {
+      const label = method.querySelector("small")?.textContent || "";
+      const value = method.querySelector("strong");
+      if (label.includes("واتساب")) setNodeText(value, contact.phoneDisplay || contact.phone);
+      if (label.includes("البريد")) setNodeText(value, contact.email);
+      if (label.includes("الموقع")) setNodeText(value, contact.address);
+      if (label.includes("ساعات")) setNodeText(value, contact.workingHours);
+    });
+
+    const contactColumn = footerColumnByHeading("تواصل");
+    if (contactColumn) {
+      const address = [...contactColumn.querySelectorAll(":scope > span")][0];
+      setNodeText(address, contact.address);
+    }
+  }
+
+  function applySiteSettings(settings) {
+    if (!settings || typeof settings !== "object") return;
+    applyHeaderSettings(settings.header);
+    applyFooterSettings(settings.footer);
+    applyContactSettings(settings.contact);
+  }
+
   async function init() {
     const slug = getPageSlug();
     if (!slug) return;
     try {
-      const apiUrl = `/api/cms/pages/${encodeURIComponent(slug)}?cms=${Date.now()}`;
-      const response = await fetch(apiUrl, {
+      const requestOptions = {
         cache: "no-store",
         headers: { Accept: "application/json", "Cache-Control": "no-cache" }
-      });
-      if (!response.ok) return;
-      const data = await response.json();
+      };
+      const timestamp = Date.now();
+      const [pageResponse, settingsResponse] = await Promise.all([
+        fetch(`/api/cms/pages/${encodeURIComponent(slug)}?cms=${timestamp}`, requestOptions),
+        fetch(`/api/cms/settings?cms=${timestamp}`, requestOptions)
+      ]);
+
+      if (settingsResponse.ok) {
+        const settingsData = await settingsResponse.json();
+        if (settingsData?.settings) applySiteSettings(settingsData.settings);
+      }
+
+      if (!pageResponse.ok) return;
+      const data = await pageResponse.json();
       if (!data?.page || !Array.isArray(data.sections)) return;
       applyPageMeta(data.page);
       applySections(data.sections);
@@ -275,7 +401,7 @@
     const updates = new BroadcastChannel("nooha-cms-updates");
     updates.addEventListener("message", (event) => {
       const message = event.data;
-      if (message?.type === "published" && message.slug === getPageSlug()) {
+      if ((message?.type === "published" && message.slug === getPageSlug()) || message?.type === "settings-published") {
         window.location.reload();
       }
     });

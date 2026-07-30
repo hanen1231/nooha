@@ -27,17 +27,23 @@ import {
   createCmsSection,
   deleteCmsSection,
   discardCmsPageDraft,
+  discardCmsSiteSettingsDraft,
   getCmsPageBySlug,
   getCmsSectionById,
+  getCmsSiteSettingByKey,
   listCmsPages,
   listCmsSectionsByPageId,
+  listCmsSiteSettings,
   publishCmsPage,
+  publishCmsSiteSettings,
   reorderCmsSections,
   updateCmsPage,
   updateCmsSectionContent,
   updateCmsSectionVisibility,
+  updateCmsSiteSettingDraft,
   type CmsPageRow,
-  type CmsSectionRow
+  type CmsSectionRow,
+  type CmsSiteSettingRow
 } from "./cms/database";
 import {
   clearSessionCookie,
@@ -59,6 +65,7 @@ const LOGIN_ATTEMPT_RETENTION_MS = 24 * 60 * 60 * 1000;
 const MAX_FAILED_LOGIN_ATTEMPTS = 5;
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SECTION_ID_PATTERN = /^[A-Za-z0-9_-]{1,120}$/;
+const SITE_SETTING_KEYS = new Set(["header", "footer", "contact"]);
 const SECTION_TYPES = new Set([
   "hero",
   "text",
@@ -153,6 +160,78 @@ function normalizeSectionContent(value: unknown): Record<string, unknown> {
   }
 
   return content;
+}
+
+
+function normalizeLinkItems(value: unknown): Array<{ label: string; url: string }> {
+  if (!Array.isArray(value)) return [];
+  return value.slice(0, 30).map((item) => {
+    const input = typeof item === "object" && item !== null && !Array.isArray(item)
+      ? (item as Record<string, unknown>)
+      : {};
+    return {
+      label: cleanString(input.label, 160),
+      url: cleanString(input.url, 1000)
+    };
+  }).filter((item) => item.label && item.url);
+}
+
+function normalizeSiteSetting(settingKey: string, value: unknown): Record<string, unknown> {
+  const input = asObject(value);
+  if (settingKey === "header") {
+    return {
+      siteName: cleanString(input.siteName, 180),
+      siteTagline: cleanString(input.siteTagline, 240),
+      logoUrl: cleanString(input.logoUrl, 1000),
+      logoAlt: cleanString(input.logoAlt, 240),
+      navItems: normalizeLinkItems(input.navItems)
+    };
+  }
+
+  if (settingKey === "footer") {
+    return {
+      summary: cleanString(input.summary, 3000),
+      copyright: cleanString(input.copyright, 500),
+      secondaryText: cleanString(input.secondaryText, 500),
+      quickLinks: normalizeLinkItems(input.quickLinks),
+      kitchenLinks: normalizeLinkItems(input.kitchenLinks)
+    };
+  }
+
+  if (settingKey === "contact") {
+    return {
+      email: cleanString(input.email, 320),
+      phone: cleanString(input.phone, 80),
+      phoneDisplay: cleanString(input.phoneDisplay, 80),
+      whatsappNumber: cleanString(input.whatsappNumber, 80),
+      address: cleanString(input.address, 500),
+      workingHours: cleanString(input.workingHours, 500),
+      instagramUrl: cleanString(input.instagramUrl, 1000),
+      snapchatUrl: cleanString(input.snapchatUrl, 1000)
+    };
+  }
+
+  throw new HttpError(400, "invalid_site_setting", "Invalid site setting key.");
+}
+
+function serializeCmsSiteSetting(setting: CmsSiteSettingRow, mode: "admin" | "public") {
+  const base = {
+    key: setting.setting_key,
+    displayName: setting.display_name,
+    updatedAt: setting.updated_at,
+    publishedAt: setting.published_at
+  };
+
+  if (mode === "public") {
+    return { ...base, content: parseStoredJson(setting.published_json) };
+  }
+
+  return {
+    ...base,
+    draftContent: parseStoredJson(setting.draft_json),
+    publishedContent: parseStoredJson(setting.published_json),
+    hasUnpublishedChanges: setting.draft_json !== setting.published_json
+  };
 }
 
 function serializeCmsPage(page: CmsPageRow) {
@@ -352,6 +431,19 @@ async function handleLogout(request: Request, env: Env): Promise<Response> {
 
 async function handlePublicCmsApi(request: Request, env: Env, pathname: string): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed();
+
+  if (pathname === "/api/cms/settings") {
+    const settings = await listCmsSiteSettings(env.DB);
+    const serialized = Object.fromEntries(
+      settings.map((setting) => [setting.setting_key, parseStoredJson(setting.published_json)])
+    );
+    return jsonResponse(
+      { ok: true, settings: serialized },
+      200,
+      { "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0" }
+    );
+  }
+
   const match = pathname.match(/^\/api\/cms\/pages\/([a-z0-9-]{1,100})$/);
   if (!match) return errorResponse(404, "not_found", "Not found.");
 
@@ -561,8 +653,79 @@ async function handleAdminDeleteSection(env: Env, sectionId: string): Promise<Re
   return jsonResponse({ ok: true });
 }
 
+
+async function handleAdminListSiteSettings(env: Env): Promise<Response> {
+  const settings = await listCmsSiteSettings(env.DB);
+  return jsonResponse({
+    ok: true,
+    settings: settings.map((setting) => serializeCmsSiteSetting(setting, "admin"))
+  });
+}
+
+async function handleAdminUpdateSiteSetting(
+  request: Request,
+  env: Env,
+  settingKey: string
+): Promise<Response> {
+  if (!SITE_SETTING_KEYS.has(settingKey)) {
+    throw new HttpError(404, "cms_site_setting_not_found", "CMS site setting was not found.");
+  }
+  if (!(await getCmsSiteSettingByKey(env.DB, settingKey))) {
+    throw new HttpError(404, "cms_site_setting_not_found", "CMS site setting was not found.");
+  }
+
+  const body = asObject(await readJsonBody(request));
+  const content = normalizeSiteSetting(settingKey, body.content ?? {});
+  await updateCmsSiteSettingDraft(env.DB, {
+    settingKey,
+    contentJson: JSON.stringify(content),
+    updatedAt: new Date().toISOString()
+  });
+  const setting = await getCmsSiteSettingByKey(env.DB, settingKey);
+  return jsonResponse({
+    ok: true,
+    setting: setting ? serializeCmsSiteSetting(setting, "admin") : null
+  });
+}
+
+async function handleAdminPublishSiteSettings(env: Env): Promise<Response> {
+  await publishCmsSiteSettings(env.DB, new Date().toISOString());
+  const settings = await listCmsSiteSettings(env.DB);
+  if (settings.some((setting) => setting.draft_json !== setting.published_json)) {
+    throw new HttpError(500, "cms_settings_publish_verification_failed", "CMS settings publish verification failed.");
+  }
+  return jsonResponse({
+    ok: true,
+    settings: settings.map((setting) => serializeCmsSiteSetting(setting, "admin"))
+  });
+}
+
+async function handleAdminDiscardSiteSettings(env: Env): Promise<Response> {
+  await discardCmsSiteSettingsDraft(env.DB, new Date().toISOString());
+  return handleAdminListSiteSettings(env);
+}
+
 async function handleCmsAdminApi(request: Request, env: Env, pathname: string): Promise<Response> {
   await requireSession(env, request);
+
+  if (pathname === "/api/admin/cms/settings") {
+    return request.method === "GET" ? handleAdminListSiteSettings(env) : methodNotAllowed();
+  }
+
+  if (pathname === "/api/admin/cms/settings/publish") {
+    return request.method === "POST" ? handleAdminPublishSiteSettings(env) : methodNotAllowed();
+  }
+
+  if (pathname === "/api/admin/cms/settings/discard") {
+    return request.method === "POST" ? handleAdminDiscardSiteSettings(env) : methodNotAllowed();
+  }
+
+  const settingMatch = pathname.match(/^\/api\/admin\/cms\/settings\/(header|footer|contact)$/);
+  if (settingMatch) {
+    return request.method === "PUT"
+      ? handleAdminUpdateSiteSetting(request, env, settingMatch[1] ?? "")
+      : methodNotAllowed();
+  }
 
   if (pathname === "/api/admin/cms/pages") {
     if (request.method === "GET") return handleAdminListPages(env);

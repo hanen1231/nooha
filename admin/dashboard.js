@@ -32,6 +32,8 @@ const state = {
   currentPage: null,
   sections: [],
   media: [],
+  settings: {},
+  settingsLoaded: false,
   orderDirty: false,
   editingSectionId: null,
   selectedTemplate: sectionTemplates[0].type,
@@ -66,7 +68,14 @@ const nodes = {
   pageVisibleCount: $("#page-visible-count"),
   pagePendingCount: $("#page-pending-count"),
   mediaGrid: $("#media-grid"),
-  mediaDialogGrid: $("#media-dialog-grid")
+  mediaDialogGrid: $("#media-dialog-grid"),
+  settingsForm: $("#site-settings-form"),
+  settingsEditor: $("#settings-editor"),
+  settingsLoading: $("#settings-loading"),
+  settingsStatus: $("#settings-status-badge"),
+  settingsPendingNote: $("#settings-pending-note"),
+  settingsDiscard: $("#settings-discard-button"),
+  settingsPublish: $("#settings-publish-button")
 };
 
 function showMessage(text, type = "error") {
@@ -85,7 +94,10 @@ function apiError(body, fallback) {
     invalid_page: "تحقق من بيانات الصفحة.",
     invalid_section: "تحقق من بيانات السكشن.",
     last_section: "لا يمكن حذف آخر سكشن في الصفحة.",
-    cms_publish_verification_failed: "فشل التحقق من المحتوى المنشور. لم يتم اعتماد النشر."
+    cms_publish_verification_failed: "فشل التحقق من المحتوى المنشور. لم يتم اعتماد النشر.",
+    cms_site_setting_not_found: "إعداد الموقع المطلوب غير موجود.",
+    invalid_site_setting: "تحقق من بيانات إعدادات الموقع.",
+    cms_settings_publish_verification_failed: "فشل التحقق من إعدادات الموقع بعد النشر."
   };
   return messages[code] || fallback;
 }
@@ -151,6 +163,9 @@ function setView(view) {
   $$(".view-panel").forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === view));
   const titles = { overview: "لوحة التحكم", pages: "الصفحات والمحتوى", media: "مكتبة الصور", settings: "إعدادات الموقع" };
   $("#view-title").textContent = titles[view] || "لوحة التحكم";
+  if (view === "settings" && !state.settingsLoaded) {
+    loadSiteSettings().catch((error) => showMessage(error.message));
+  }
 }
 
 function updateStats() {
@@ -530,6 +545,170 @@ async function savePageSettings(event) {
   showMessage("تم حفظ إعدادات الصفحة.", "success");
 }
 
+
+function settingValue(id, value) {
+  const input = $(id);
+  if (input) input.value = typeof value === "string" ? value : "";
+}
+
+function settingsLinkRow(item = {}) {
+  const row = document.createElement("div");
+  row.className = "settings-link-row";
+  row.innerHTML = `
+    <span class="settings-link-move"><button type="button" data-move-setting-link="up" aria-label="تحريك لأعلى">↑</button><button type="button" data-move-setting-link="down" aria-label="تحريك لأسفل">↓</button></span>
+    <label><span>اسم الرابط</span><input data-field="label" maxlength="160"></label>
+    <label><span>المسار أو الرابط</span><input data-field="url" maxlength="1000" dir="ltr"></label>
+    <button class="icon-button danger" data-remove-setting-link type="button" aria-label="حذف الرابط">×</button>`;
+  $('[data-field="label"]', row).value = item.label || "";
+  $('[data-field="url"]', row).value = item.url || "";
+  return row;
+}
+
+function renderSettingsLinks(container, items) {
+  container.replaceChildren();
+  (Array.isArray(items) ? items : []).forEach((item) => container.append(settingsLinkRow(item)));
+}
+
+function readSettingsLinks(container) {
+  return $$(".settings-link-row", container).map((row) => ({
+    label: $('[data-field="label"]', row).value.trim(),
+    url: $('[data-field="url"]', row).value.trim()
+  })).filter((item) => item.label && item.url);
+}
+
+function hasPendingSiteSettings() {
+  return Object.values(state.settings).some((setting) => setting?.hasUnpublishedChanges);
+}
+
+function renderSiteSettingsStatus() {
+  const pending = hasPendingSiteSettings();
+  nodes.settingsStatus.textContent = pending ? "مسودة غير منشورة" : "منشورة";
+  nodes.settingsStatus.className = `status-badge ${pending ? "draft" : "published"}`;
+  nodes.settingsPendingNote.textContent = pending
+    ? "هناك تعديلات محفوظة كمسودة. اضغط نشر حتى تظهر للزوار."
+    : "الإعدادات المنشورة تظهر في جميع صفحات الموقع.";
+  nodes.settingsDiscard.hidden = !pending;
+  nodes.settingsPublish.classList.toggle("attention", pending);
+}
+
+function fillSiteSettingsForm() {
+  const header = state.settings.header?.draftContent || {};
+  const footer = state.settings.footer?.draftContent || {};
+  const contact = state.settings.contact?.draftContent || {};
+
+  settingValue("#settings-site-name", header.siteName);
+  settingValue("#settings-site-tagline", header.siteTagline);
+  settingValue("#settings-logo-url", header.logoUrl);
+  settingValue("#settings-logo-alt", header.logoAlt);
+  renderSettingsLinks($("#settings-nav-items"), header.navItems);
+
+  settingValue("#settings-footer-summary", footer.summary);
+  settingValue("#settings-footer-copyright", footer.copyright);
+  settingValue("#settings-footer-secondary", footer.secondaryText);
+  renderSettingsLinks($("#settings-quick-links"), footer.quickLinks);
+  renderSettingsLinks($("#settings-kitchen-links"), footer.kitchenLinks);
+
+  settingValue("#settings-contact-email", contact.email);
+  settingValue("#settings-contact-phone-display", contact.phoneDisplay);
+  settingValue("#settings-contact-phone", contact.phone);
+  settingValue("#settings-contact-whatsapp", contact.whatsappNumber);
+  settingValue("#settings-contact-address", contact.address);
+  settingValue("#settings-contact-hours", contact.workingHours);
+  settingValue("#settings-contact-instagram", contact.instagramUrl);
+  settingValue("#settings-contact-snapchat", contact.snapchatUrl);
+  renderSiteSettingsStatus();
+}
+
+async function loadSiteSettings() {
+  nodes.settingsLoading.hidden = false;
+  nodes.settingsEditor.hidden = true;
+  const { response, body } = await fetchJson("/api/admin/cms/settings");
+  if (!response.ok) throw new Error(apiError(body, "تعذر تحميل إعدادات الموقع."));
+  state.settings = Object.fromEntries((body.settings || []).map((setting) => [setting.key, setting]));
+  state.settingsLoaded = true;
+  fillSiteSettingsForm();
+  nodes.settingsLoading.hidden = true;
+  nodes.settingsEditor.hidden = false;
+}
+
+function siteSettingsPayloads() {
+  return {
+    header: {
+      siteName: $("#settings-site-name").value,
+      siteTagline: $("#settings-site-tagline").value,
+      logoUrl: $("#settings-logo-url").value,
+      logoAlt: $("#settings-logo-alt").value,
+      navItems: readSettingsLinks($("#settings-nav-items"))
+    },
+    footer: {
+      summary: $("#settings-footer-summary").value,
+      copyright: $("#settings-footer-copyright").value,
+      secondaryText: $("#settings-footer-secondary").value,
+      quickLinks: readSettingsLinks($("#settings-quick-links")),
+      kitchenLinks: readSettingsLinks($("#settings-kitchen-links"))
+    },
+    contact: {
+      email: $("#settings-contact-email").value,
+      phoneDisplay: $("#settings-contact-phone-display").value,
+      phone: $("#settings-contact-phone").value,
+      whatsappNumber: $("#settings-contact-whatsapp").value,
+      address: $("#settings-contact-address").value,
+      workingHours: $("#settings-contact-hours").value,
+      instagramUrl: $("#settings-contact-instagram").value,
+      snapchatUrl: $("#settings-contact-snapchat").value
+    }
+  };
+}
+
+async function saveSiteSettings(event) {
+  event.preventDefault();
+  const payloads = siteSettingsPayloads();
+  const results = await Promise.all(Object.entries(payloads).map(([key, content]) => fetchJson(`/api/admin/cms/settings/${key}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content })
+  })));
+  const failed = results.find(({ response }) => !response.ok);
+  if (failed) throw new Error(apiError(failed.body, "تعذر حفظ إعدادات الموقع."));
+  await loadSiteSettings();
+  showMessage("تم حفظ إعدادات الموقع كمسودة.", "success");
+}
+
+async function verifyPublishedSiteSettings() {
+  const response = await fetch(`/api/cms/settings?cms=${Date.now()}`, {
+    cache: "no-store",
+    headers: { Accept: "application/json", "Cache-Control": "no-cache" }
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || !body.ok || !body.settings) {
+    throw new Error("تعذر التحقق من إعدادات الموقع العامة بعد النشر.");
+  }
+  Object.entries(state.settings).forEach(([key, setting]) => {
+    if (comparableJson(body.settings[key]) !== comparableJson(setting.publishedContent)) {
+      throw new Error(`لم يتم التحقق من نشر إعداد: ${setting.displayName}`);
+    }
+  });
+}
+
+async function publishSiteSettings() {
+  const { response, body } = await fetchJson("/api/admin/cms/settings/publish", { method: "POST" });
+  if (!response.ok) throw new Error(apiError(body, "تعذر نشر إعدادات الموقع."));
+  state.settings = Object.fromEntries((body.settings || []).map((setting) => [setting.key, setting]));
+  await verifyPublishedSiteSettings();
+  fillSiteSettingsForm();
+  cmsUpdates?.postMessage({ type: "settings-published", publishedAt: Date.now() });
+  showMessage("تم نشر إعدادات الموقع والتحقق منها.", "success");
+}
+
+async function discardSiteSettings() {
+  if (!window.confirm("إلغاء جميع تعديلات إعدادات الموقع والرجوع إلى آخر نسخة منشورة؟")) return;
+  const { response, body } = await fetchJson("/api/admin/cms/settings/discard", { method: "POST" });
+  if (!response.ok) throw new Error(apiError(body, "تعذر إلغاء مسودة الإعدادات."));
+  state.settings = Object.fromEntries((body.settings || []).map((setting) => [setting.key, setting]));
+  fillSiteSettingsForm();
+  showMessage("تم إلغاء مسودة إعدادات الموقع.", "success");
+}
+
 async function loadMedia() {
   const response = await fetch("/admin/media-manifest.json", { credentials: "same-origin" });
   state.media = response.ok ? await response.json() : [];
@@ -583,6 +762,29 @@ function bindEvents() {
   $("#section-form").addEventListener("submit", (event) => saveSection(event).catch((error) => showMessage(error.message)));
   $("#page-form").addEventListener("submit", (event) => createPage(event).catch((error) => showMessage(error.message)));
   $("#page-settings-form").addEventListener("submit", (event) => savePageSettings(event).catch((error) => showMessage(error.message)));
+  nodes.settingsForm.addEventListener("submit", (event) => saveSiteSettings(event).catch((error) => showMessage(error.message)));
+  nodes.settingsPublish.addEventListener("click", () => publishSiteSettings().catch((error) => showMessage(error.message)));
+  nodes.settingsDiscard.addEventListener("click", () => discardSiteSettings().catch((error) => showMessage(error.message)));
+  $("#choose-settings-logo").addEventListener("click", () => openMediaPicker($("#settings-logo-url")));
+  $("#settings-add-nav").addEventListener("click", () => $("#settings-nav-items").append(settingsLinkRow()));
+  $("#settings-add-quick-link").addEventListener("click", () => $("#settings-quick-links").append(settingsLinkRow()));
+  $("#settings-add-kitchen-link").addEventListener("click", () => $("#settings-kitchen-links").append(settingsLinkRow()));
+  nodes.settingsForm.addEventListener("click", (event) => {
+    const remove = event.target.closest("[data-remove-setting-link]");
+    if (remove) {
+      remove.closest(".settings-link-row")?.remove();
+      return;
+    }
+    const move = event.target.closest("[data-move-setting-link]");
+    const row = move?.closest(".settings-link-row");
+    if (!move || !row) return;
+    if (move.dataset.moveSettingLink === "up" && row.previousElementSibling) {
+      row.parentElement.insertBefore(row, row.previousElementSibling);
+    }
+    if (move.dataset.moveSettingLink === "down" && row.nextElementSibling) {
+      row.parentElement.insertBefore(row.nextElementSibling, row);
+    }
+  });
   $("#template-form").addEventListener("submit", (event) => addSection(event).catch((error) => showMessage(error.message)));
   $("#add-item-button").addEventListener("click", () => $("#items-editor").append(itemRow()));
   $("#choose-image-button").addEventListener("click", () => openMediaPicker($("#section-image-url")));

@@ -126,9 +126,62 @@
       </section>
 
       <section id="settings-view" class="view-panel" data-panel="settings">
-        <div class="panel-card wide-card settings-placeholder">
-          <div class="empty-icon">⚙</div><h2>إعدادات الموقع العامة</h2><p>الهوية، الهيدر، الفوتر وبيانات التواصل ستكون في هذه الصفحة. قاعدة البيانات مهيأة لها بالفعل.</p>
-        </div>
+        <form id="site-settings-form" class="site-settings-workspace">
+          <div class="settings-command-bar">
+            <div>
+              <span class="eyebrow-label">إعدادات عامة</span>
+              <div class="settings-title-row"><h2>هوية الموقع والهيدر والفوتر</h2><span id="settings-status-badge" class="status-badge published">منشورة</span></div>
+              <p id="settings-pending-note">التعديلات المنشورة تظهر في جميع صفحات الموقع.</p>
+            </div>
+            <div class="settings-actions">
+              <button id="settings-discard-button" class="button button-muted" type="button" hidden>إلغاء المسودة</button>
+              <button id="settings-save-button" class="button button-secondary" type="submit">حفظ كمسودة</button>
+              <button id="settings-publish-button" class="button button-primary" type="button">نشر الإعدادات</button>
+            </div>
+          </div>
+
+          <div id="settings-loading" class="loading-block">جاري تحميل إعدادات الموقع...</div>
+          <div id="settings-editor" class="settings-editor" hidden>
+            <section class="settings-card">
+              <div class="settings-card-heading"><span class="settings-card-icon">◈</span><div><h3>الهوية والقائمة العلوية</h3><p>تُطبق على شعار الموقع والاسم وروابط القائمة الرئيسية.</p></div></div>
+              <div class="form-grid two-columns">
+                <label>اسم الموقع<input id="settings-site-name" maxlength="180" required></label>
+                <label>الوصف المختصر<input id="settings-site-tagline" maxlength="240"></label>
+                <label>مسار الشعار<div class="input-action"><input id="settings-logo-url" maxlength="1000" dir="ltr"><button id="choose-settings-logo" type="button">اختيار</button></div></label>
+                <label>وصف الشعار<input id="settings-logo-alt" maxlength="240"></label>
+              </div>
+              <div class="settings-list-heading"><div><h4>روابط القائمة</h4><p>يُستخدم الترتيب نفسه في القائمة العلوية.</p></div><button id="settings-add-nav" class="button button-muted compact" type="button">+ رابط</button></div>
+              <div id="settings-nav-items" class="settings-link-list"></div>
+            </section>
+
+            <section class="settings-card">
+              <div class="settings-card-heading"><span class="settings-card-icon">▤</span><div><h3>تذييل الموقع</h3><p>النص التعريفي والحقوق وروابط الفوتر.</p></div></div>
+              <label>نبذة الفوتر<textarea id="settings-footer-summary" rows="4" maxlength="3000"></textarea></label>
+              <div class="form-grid two-columns">
+                <label>حقوق النشر<input id="settings-footer-copyright" maxlength="500"></label>
+                <label>النص الإضافي<input id="settings-footer-secondary" maxlength="500"></label>
+              </div>
+              <div class="settings-list-heading"><div><h4>الروابط السريعة</h4></div><button id="settings-add-quick-link" class="button button-muted compact" type="button">+ رابط</button></div>
+              <div id="settings-quick-links" class="settings-link-list"></div>
+              <div class="settings-list-heading spaced"><div><h4>روابط المطابخ والفروع</h4></div><button id="settings-add-kitchen-link" class="button button-muted compact" type="button">+ رابط</button></div>
+              <div id="settings-kitchen-links" class="settings-link-list"></div>
+            </section>
+
+            <section class="settings-card settings-card-full">
+              <div class="settings-card-heading"><span class="settings-card-icon">◎</span><div><h3>بيانات التواصل</h3><p>تُحدّث البريد والواتساب والعنوان وحسابات التواصل في الموقع.</p></div></div>
+              <div class="form-grid two-columns">
+                <label>البريد الإلكتروني<input id="settings-contact-email" type="email" maxlength="320" dir="ltr"></label>
+                <label>رقم الهاتف للعرض<input id="settings-contact-phone-display" maxlength="80" dir="ltr"></label>
+                <label>رقم الهاتف للرابط<input id="settings-contact-phone" maxlength="80" dir="ltr" placeholder="+966..."></label>
+                <label>رقم واتساب بدون علامة +<input id="settings-contact-whatsapp" maxlength="80" dir="ltr" placeholder="966..."></label>
+                <label>العنوان<input id="settings-contact-address" maxlength="500"></label>
+                <label>ساعات العمل<input id="settings-contact-hours" maxlength="500"></label>
+                <label>رابط إنستقرام<input id="settings-contact-instagram" type="url" maxlength="1000" dir="ltr"></label>
+                <label>رابط سناب شات<input id="settings-contact-snapchat" type="url" maxlength="1000" dir="ltr"></label>
+              </div>
+            </section>
+          </div>
+        </form>
       </section>
     </main>
   </div>
@@ -197,6 +250,6 @@
     <div class="dialog-body"><label class="search-field"><span>⌕</span><input id="media-dialog-search" type="search" placeholder="ابحث عن صورة"></label><div id="media-dialog-grid" class="media-grid"></div></div>
   </dialog>
 
-  <script src="/admin/dashboard.js" defer></script>
+  <script src="/admin/dashboard.js?v=site-settings-v1.1" defer></script>
 </body>
 </html>
