@@ -448,7 +448,7 @@ async function handlePublicCmsApi(request: Request, env: Env, pathname: string):
   if (!match) return errorResponse(404, "not_found", "Not found.");
 
   const { page, sections } = await getPageBundle(env, match[1] ?? "");
-  if (page.status === "archived") throw new HttpError(404, "cms_page_not_found", "CMS page was not found.");
+  if (page.status !== "published") throw new HttpError(404, "cms_page_not_found", "CMS page was not found.");
 
   return jsonResponse(
     {
