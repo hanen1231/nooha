@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "nooha-cms-db",
-      "database_id": "431efb93-5a5f-48fa-be7c-ecc49677ba00",
+      "database_id": "604996e9-31c3-4d38-aef7-c792e85dc8bd",
       "migrations_dir": "migrations"
     }
   ]

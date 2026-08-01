@@ -9,3 +9,6 @@ public/_contact-check-profile/
 public/_hero-check-profile-*/
 .rollback/
 *.bak
+backups/
+nooha-cms-db-backup-*.sql
+wrangler.before-nooha-move.jsonc
