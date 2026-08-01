@@ -26,6 +26,10 @@ function freshPublicUrl(url) {
   return `${url}${separator}cms=${Date.now()}`;
 }
 
+function siteRootUrl() {
+  return new URL("/", window.location.origin).href;
+}
+
 const state = {
   session: null,
   pages: [],
@@ -245,10 +249,14 @@ function renderPageSummary() {
   nodes.currentPageDescription.textContent = state.currentPage.seoDescription || `الرابط: ${state.currentPage.publicUrl}`;
   const previewUrl = freshPublicUrl(state.currentPage.publicUrl);
   nodes.previewLink.href = previewUrl;
-  nodes.openSiteLink.href = previewUrl;
   nodes.publishPage.classList.toggle("attention", hasPending);
   nodes.unpublishedAlert.hidden = !hasPending;
   nodes.discardDraft.hidden = !hasPending;
+}
+
+function renderOpenSiteLink() {
+  nodes.openSiteLink.href = siteRootUrl();
+  nodes.openSiteLink.rel = "noopener noreferrer";
 }
 
 function renderSections() {
@@ -834,6 +842,7 @@ async function init() {
   try {
     populateSectionTypeSelect();
     bindEvents();
+    renderOpenSiteLink();
     if (!(await loadSession())) return window.location.replace("/admin/login");
     await Promise.all([loadPages({ keepSelection: false }), loadMedia()]);
     if (state.pages.length) await selectPage(state.pages[0].slug);
