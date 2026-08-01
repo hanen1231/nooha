@@ -3072,6 +3072,50 @@ body:not(.home-page) .page-hero p {
   display: none;
 }
 
+.admin-entry-link {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.reference-top-info .admin-entry-top-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border: 1px solid rgba(217, 161, 59, 0.52);
+  border-radius: 4px;
+  color: var(--color-white);
+  background: rgba(217, 161, 59, 0.16);
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.reference-top-info .admin-entry-top-link:hover {
+  color: var(--brand-dark);
+  background: var(--brand-gold);
+}
+
+.reference-nav .admin-entry-item {
+  display: none;
+}
+
+.admin-entry-standalone,
+.main-nav > .admin-entry-generic-link {
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  color: var(--brand-dark);
+  background: var(--brand-gold);
+  font-weight: 900;
+}
+
+.admin-entry-standalone:hover,
+.main-nav > .admin-entry-generic-link:hover {
+  color: var(--brand-dark);
+  background: var(--brand-beige);
+}
+
 .reference-mega {
   position: absolute;
   top: calc(100% - 2px);
@@ -3610,6 +3654,10 @@ body:not(.home-page) .page-hero p {
     max-width: 100%;
   }
 
+  .reference-top-info .admin-entry-top-link {
+    display: none;
+  }
+
   .reference-mainbar {
     padding: 12px clamp(18px, 5vw, 28px);
     gap: 12px;
@@ -3836,6 +3884,29 @@ body:not(.home-page) .page-hero p {
 
   .reference-nav .profile-item > a:hover {
     transform: none;
+  }
+
+  .reference-nav .admin-entry-item {
+    display: flex;
+  }
+
+  .reference-nav .admin-entry-item > .admin-entry-mobile-link {
+    justify-content: center;
+    min-height: 46px;
+    margin-top: 4px;
+    border: 1px solid rgba(217, 161, 59, 0.58);
+    border-radius: 6px;
+    color: var(--brand-dark);
+    background: var(--brand-gold);
+  }
+
+  .reference-nav .admin-entry-item > .admin-entry-mobile-link:hover {
+    color: var(--brand-dark);
+    background: var(--brand-beige);
+  }
+
+  .reference-nav .admin-entry-item > .admin-entry-mobile-link::after {
+    display: none;
   }
 
   .hero-message {

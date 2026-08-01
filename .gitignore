@@ -1,7 +1,11 @@
-﻿.vscode/
+.vscode/
 dist/
 node_modules/
 .wrangler/
 .dev.vars
 .dev.vars.*
 backup-*/
+public/_contact-check-profile/
+public/_hero-check-profile-*/
+.rollback/
+*.bak

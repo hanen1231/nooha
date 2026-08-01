@@ -319,3 +319,10 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 [hidden] {
   display: none !important;
 }
+/* settings-publish-safety-v1 */
+#settings-publish-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+  filter: grayscale(0.2);
+}

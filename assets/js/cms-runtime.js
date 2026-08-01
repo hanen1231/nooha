@@ -279,9 +279,10 @@
     document.querySelectorAll(".brand small:not([lang])").forEach((node) => setNodeText(node, header.siteTagline));
 
     document.querySelectorAll("nav[data-nav]").forEach((nav) => {
-      const links = nav.classList.contains("reference-nav")
+      const links = (nav.classList.contains("reference-nav")
         ? [...nav.querySelectorAll(":scope > .reference-nav-item > a")]
-        : [...nav.querySelectorAll(":scope > a")];
+        : [...nav.querySelectorAll(":scope > a")])
+        .filter((link) => !link.matches("[data-static-nav-link]") && !link.closest("[data-static-nav-item]"));
       updateLinkCollection(links, header.navItems);
     });
   }

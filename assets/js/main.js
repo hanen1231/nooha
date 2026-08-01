@@ -1,6 +1,62 @@
 const header = document.querySelector("[data-header]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
+const adminAccessHref = "/admin";
+const adminAccessLabel = "دخول الإدارة";
+
+function createAdminAccessLink(className, slot) {
+  const link = document.createElement("a");
+  link.href = adminAccessHref;
+  link.textContent = adminAccessLabel;
+  link.className = className;
+  link.dataset.adminEntry = slot;
+  link.dataset.staticNavLink = "";
+  link.setAttribute("aria-label", adminAccessLabel);
+  return link;
+}
+
+function ensureAdminAccessLink() {
+  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) return;
+
+  const referenceHeaders = document.querySelectorAll(".reference-header");
+
+  referenceHeaders.forEach((currentHeader) => {
+    const topInfo = currentHeader.querySelector(".reference-top-info");
+    if (topInfo && !topInfo.querySelector('[data-admin-entry="top"]')) {
+      const topLink = createAdminAccessLink("admin-entry-link admin-entry-top-link", "top");
+      topLink.dir = "rtl";
+      topInfo.append(topLink);
+    }
+
+    const currentNav = currentHeader.querySelector(".reference-nav");
+    if (currentNav && !currentNav.querySelector('[data-admin-entry="mobile"]')) {
+      const item = document.createElement("div");
+      item.className = "reference-nav-item admin-entry-item";
+      item.dataset.staticNavItem = "";
+      item.append(createAdminAccessLink("admin-entry-link admin-entry-mobile-link", "mobile"));
+      currentNav.append(item);
+    }
+  });
+
+  if (!referenceHeaders.length) {
+    document.querySelectorAll("nav[data-nav]").forEach((currentNav) => {
+      if (!currentNav.querySelector('[data-admin-entry="generic"]')) {
+        currentNav.append(createAdminAccessLink("admin-entry-link admin-entry-generic-link", "generic"));
+      }
+    });
+
+    document.querySelectorAll("header[data-header] .nav-wrap").forEach((wrap) => {
+      if (!wrap.querySelector("nav[data-nav]") && !wrap.querySelector('[data-admin-entry="standalone"]')) {
+        wrap.append(createAdminAccessLink("admin-entry-link admin-entry-standalone", "standalone"));
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-static-nav-item][hidden], [data-static-nav-link][hidden]").forEach((node) => {
+    node.hidden = false;
+  });
+}
 
 const translations = {
   text: {
@@ -684,6 +740,9 @@ navToggle?.addEventListener("click", (event) => {
   event.stopPropagation();
   setNavOpen(!nav?.classList.contains("is-open"));
 });
+
+ensureAdminAccessLink();
+document.addEventListener("nooha:cms-ready", ensureAdminAccessLink);
 
 document.querySelectorAll(".reference-language").forEach((switcher) => {
   switcher.setAttribute("data-language-switch", "");
