@@ -1,6 +1,6 @@
 import type { PasswordHash } from "./crypto";
 
-export const INITIAL_ADMIN_EMAIL = "Nawafoly6@gmail.com";
+export const INITIAL_ADMIN_EMAIL = "Noohacmp@gmail.com";
 
 export interface AdminUserRow {
   id: string;
