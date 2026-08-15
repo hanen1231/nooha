@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nooha-site-cms",
   "main": "src/worker.ts",
@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "nooha-cms-db",
-      "database_id": "604996e9-31c3-4d38-aef7-c792e85dc8bd",
+      "database_id": "54957841-25cf-4bc8-9f79-c1ff805a3a51",
       "migrations_dir": "migrations"
     }
   ]
